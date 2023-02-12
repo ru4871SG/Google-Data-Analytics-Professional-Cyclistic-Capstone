@@ -15,10 +15,10 @@ output:
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
 
-Below analysis case study on Cyclistic is my capstone project for Google Data Analytics Professional Certificate Program. My name is Ruddy Setiadi Gunawan, and you can find my report below. 
+This case study on Cyclistic is my capstone project for Google Data Analytics Professional Certificate Program. My name is Ruddy Setiadi Gunawan, and you can find my report below. 
 
-You can also find my step-by-step data analysis process by going to the
-[Data Analysis Steps tab](https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/Journal.html)<br><br><br>
+Feel free to also check my data cleaning and analysis process by going to the
+<a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/process.html" target="_blank">Process tab</a><br><br><br>
 
 # Introduction
 <hr>
@@ -38,7 +38,7 @@ Cyclistic's director of marketing believes the company’s future will depend on
 <hr>
 While Cyclistic is a fictional company, data gathered for this analysis come from a real company operating in Chicago called Divvy Bikes.
 
-[Divvy trip history data](https://divvybikes.com/system-data) from January 2022 to December 2022 were used for this analysis.
+<a href="https://divvybikes.com/system-data" target="_blank">Divvy trip history data</a> from January 2022 to December 2022 were used for this analysis.
 
 Each trip includes:
 
@@ -48,7 +48,7 @@ Each trip includes:
 - Trip end station 
 - Rider type
 
-The data has been made available under [this license](https://ride.divvybikes.com/data-license-agreement)<br><br><br>
+The data has been made available under <a href="https://ride.divvybikes.com/data-license-agreement" target="_blank">this license</a><br><br><br>
 
 # Methods
 <hr>

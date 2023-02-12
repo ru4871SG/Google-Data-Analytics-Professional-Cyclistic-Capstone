@@ -1,0 +1,76 @@
+---
+title: "Cyclistic Bike-Share Analysis Case Study"
+date: "`Feb __, 2023`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    collapsed: false
+    number_sections: false
+    toc_depth: 1
+    #code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
+```
+
+Below analysis case study on Cyclistic is my capstone project for Google Data Analytics Professional Certificate Program. My name is Ruddy Setiadi Gunawan, and you can find my report below. 
+
+You can also find my step-by-step data analysis process by going to the
+[Data Analysis Steps tab](https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/Journal.html)<br><br><br>
+
+# Introduction
+<hr>
+Cyclistic is a fictional bike-share company in Chicago with over 5,800 bicycles and 600 docking stations. The company launched its bike-sharing offering service in 2016, and it has become popular in the city of Chicago. One of Cyclistic's key features is how its bikes can be unlocked from one station and returned to its any other station anytime. 
+
+Cyclistic customers who purchase single-ride or full-day passes are referred to as casual riders, whereas customers who purchase annual memberships are referred to as members. 
+
+As of February 2022, Cyclistic pricing plans are as follow:
+
+- Single-ride: \$1 to unlock, plus \$0.39 per minute
+- Full-day pass: \$15/day
+- Annual membership: \$10/month
+
+Cyclistic's director of marketing believes the company’s future will depend on maximizing the number of annual memberships. With this objective in mind, the company wants to learn how casual riders and annual members may use Cyclistic services differently, and how to use digital media to convert Cyclistic casual riders to become members.<br><br><br>
+
+# Data
+<hr>
+While Cyclistic is a fictional company, data gathered for this analysis come from a real company operating in Chicago called Divvy Bikes.
+
+[Divvy trip history data](https://divvybikes.com/system-data) from January 2022 to December 2022 were used for this analysis.
+
+Each trip includes:
+
+- Trip start day and time 
+- Trip end day and time 
+- Trip start station 
+- Trip end station 
+- Rider type
+
+The data has been made available under [this license](https://ride.divvybikes.com/data-license-agreement)<br><br><br>
+
+# Methods
+<hr>
+The datasets were loaded into RStudio, and then previewed, cleaned, filtered, merged, analyzed using multiple libraries, such as `skimr`, `tidyverse`, and `lubridate`. As for data visualization, `ggplot2`, `plotly`, `leaflet`, and `rgdal` were all used.<br><br><br>
+
+
+# Analysis Result
+<hr>
+### Popular Dates and Days
+
+![](vizzes/ggarrange_popular_dates_comparison.png){width="100%"}
+will edit this later<br><br>
+
+![](vizzes/ggplot_day_of_week_count.png){width="80%"}
+
+will edit this later<br><br>
+
+### Popular Stations
+
+will edit this later<br><br>
+
+# Recommendations
+<hr>
+
+will edit this later

@@ -1,0 +1,11 @@
+name: "Google Capstone Project - Cyclistic"
+navbar:
+  title: "Google Capstone Project - Cyclistic"
+  left:
+    - text: "Report"
+      href: index.html
+    - text: "Data Analysis Steps"
+      href: journal.html
+    - text: "Misc"
+      href: misc.html
+output_dir: "docs"

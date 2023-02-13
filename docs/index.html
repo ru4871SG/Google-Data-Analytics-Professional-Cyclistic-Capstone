@@ -430,8 +430,8 @@ look considerably higher for members.</p>
 <p>Daily routines (e.g., work commute) don’t always change throughout
 the year, but people may not really use bikes for leisures and hobbies
 in the winter months.</p>
-<p>To analyze further, let’s see how members and casuals compare between
-the days without including the dates.<br></p>
+<p>To analyze this hypothesis further, let’s see how members and casuals
+compare between the days without including the dates.<br></p>
 <p><img src="vizzes/ggplot_day_of_week_count.png"
 style="width:80.0%" /></p>
 <p>Here everything looks clearer. Members use Cyclistic bikes more on
@@ -442,12 +442,63 @@ for work commute and other weekday routines.<br><br></p>
 </div>
 <div id="popular-stations" class="section level3">
 <h3>Popular Stations</h3>
-<iframe height="300" width="80%" frameborder="0" scrolling="no" src="vizzes/leaflet_for_station_name_count_casual.html">
+<div id="popular-stations-for-casuals" class="section level4">
+<h4>Popular Stations for Casuals:</h4>
+<iframe height="300" width="85%" frameborder="0" scrolling="no" src="vizzes/leaflet_for_station_name_count_casual.html">
 </iframe>
-<p>will edit this later<br></p>
-<iframe height="300" width="80%" frameborder="0" scrolling="no" src="vizzes/leaflet_for_station_name_count_member.html">
+<p>Above interactive map shows that <b>Streeter Dr &amp; Grand Ave</b>
+is the most popular station for casuals, much more than every other
+station. Considering that <b>Streeter Dr &amp; Grand Ave</b> is located
+right next to the Navy Pier, this analysis has proven my point on how
+casuals use the bikes for leisures and hobbies. The Navy Pier is a
+tourist attraction in Chicago.<br><br></p>
+</div>
+<div id="popular-stations-for-members" class="section level4">
+<h4>Popular Stations for Members:</h4>
+<iframe height="300" width="85%" frameborder="0" scrolling="no" src="vizzes/leaflet_for_station_name_count_member.html">
 </iframe>
-<p>will edit this later<br></p>
+<p>On the other hand, the second interactive map shows popular stations
+for members. Here we can see that <b>Streeter Dr &amp; Grand Ave</b> is
+not very popular for members. The most popular stations for members are
+actually <b>Kingsbury St &amp; Kinzie St</b>, <b>Clark St &amp; Elm
+St</b>, and <b>Wells St &amp; Concord Ln</b>. And interestingly, the
+station counts are more spread out.<br><br></p>
+</div>
+</div>
+<div id="popular-hours" class="section level3">
+<h3>Popular Hours</h3>
+<p><img src="vizzes/ggarrange_popular_hours_comparison.png"
+style="width:100.0%" /> With the above data vizualization, you can see
+how both casuals and members like to use Cyclistic bikes between 15-18
+(3PM - 6PM).</p>
+<p>However, casuals have higher trip counts between 20-22 (8PM - 10PM)
+whereas members have lower trip counts for the same hours.</p>
+<p>On the other hand, morning time (7AM - 9AM) seems to be more popular
+for members, but not so much for casuals.</p>
+<p>All the findings above have proven our previous hypothesis where
+members may use the bikes more often for weekday routines, like work
+commute.<br></p>
+<p><img src="vizzes/ggplot_ride_length_avg.png"
+style="width:80.0%" /></p>
+<p>Meanwhile, average ride length from casuals and members also differ
+greatly. Casuals’ average ride length in minutes is 24.28 minutes, while
+members’ average ride length in minutes is 12.68 minutes.</p>
+<p>The fact that casuals (on average) spend much more time with
+Cyclistic bikes show that casuals often use them to go to far locations.
+This is understandable because leisure destinations such as Navy Pier
+may be a bit too far away from the casual riders’ starting stations.</p>
+<p>As for members, since they prefer to use the bikes for weekday
+routines, that explains the shorter ride length. <br><br></p>
+</div>
+<div id="popular-bike-types" class="section level3">
+<h3>Popular Bike Types</h3>
+<p><img src="vizzes/plotly_rideable_type_casual_vs_member.png"
+style="width:100.0%" /> There is a difference between casuals and
+members when it comes to bike types. Members like classic bikes much
+more than electric bikes. As for casuals, they also like classic bikes
+more than electric, but the gap is not as big as the member group.</p>
+<p>Another interesting find, it looks like all docked bikes were only
+reserved for casuals in 2022.<br><br><br></p>
 </div>
 </div>
 <div id="recommendations" class="section level1">

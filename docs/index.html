@@ -403,14 +403,17 @@ license</a><br><br><br></p>
 <h1>Methods</h1>
 <hr>
 <p>The datasets were loaded into RStudio, and then previewed, cleaned,
-filtered, merged, analyzed using multiple libraries, such as
-<code>skimr</code>, <code>tidyverse</code>, and <code>lubridate</code>.
-As for data visualization, <code>ggplot2</code>, <code>plotly</code>,
-<code>leaflet</code>, and <code>rgdal</code> were all
-used.<br><br><br></p>
+filtered, merged, and analyzed with the help of multiple libraries, such
+as <code>skimr</code>, <code>tidyverse</code>, and
+<code>lubridate</code>. As for data visualization, <code>ggplot2</code>,
+<code>plotly</code>, <code>leaflet</code>, and <code>rgdal</code> were
+all used.</p>
+<p>For the sake of my own learning purposes, I also re-analyzed the same
+datasets using SQL with BigQuery. The analysis results are consistent
+between SQL and R.<br><br><br></p>
 </div>
-<div id="analysis-result" class="section level1">
-<h1>Analysis Result</h1>
+<div id="analysis-results" class="section level1">
+<h1>Analysis Results</h1>
 <hr>
 <div id="popular-dates-and-days" class="section level3">
 <h3>Popular Dates and Days</h3>
@@ -457,12 +460,12 @@ tourist attraction in Chicago.<br><br></p>
 <h4>Popular Stations for Members:</h4>
 <iframe height="300" width="85%" frameborder="0" scrolling="no" src="vizzes/leaflet_for_station_name_count_member.html">
 </iframe>
-<p>On the other hand, the second interactive map shows popular stations
-for members. Here we can see that <b>Streeter Dr &amp; Grand Ave</b> is
-not very popular for members. The most popular stations for members are
-actually <b>Kingsbury St &amp; Kinzie St</b>, <b>Clark St &amp; Elm
-St</b>, and <b>Wells St &amp; Concord Ln</b>. And interestingly, the
-station counts are more spread out.<br><br></p>
+<p>The second interactive map shows popular stations for members. Here
+we can see that <b>Streeter Dr &amp; Grand Ave</b> is not very popular
+for members. The most popular stations for members are actually
+<b>Kingsbury St &amp; Kinzie St</b>, <b>Clark St &amp; Elm St</b>, and
+<b>Wells St &amp; Concord Ln</b>. And interestingly, the station counts
+are more spread out.<br><br></p>
 </div>
 </div>
 <div id="popular-hours" class="section level3">
@@ -504,7 +507,38 @@ reserved for casuals in 2022.<br><br><br></p>
 <div id="recommendations" class="section level1">
 <h1>Recommendations</h1>
 <hr>
-<p>will edit this later</p>
+<p>Based on my data analysis result, here are my recommendations for the
+company:</p>
+<p><b>1. Casual riders should receive email newsletters showing how they
+can save money</b></p>
+<p>Above analyses prove that casuals often use the bikes for leisure
+purposes. Average ride length for casuals is 24.28 minutes. That means
+on average casuals pay $1 to unlock and $9.46 for each trip. They can
+save money by signing up for annual memberships since it will only cost
+them $10/month.</p>
+<p><b>2. Personalized newsletters to casuals who use the bikes not for
+leisures</b></p>
+<p>There are still some casuals who may use the bikes for non-leisure
+purposes. As we can see from the above interactive map, not every casual
+go to stations close to the Navy Pear. And as we can see from the bar
+plots, there are also casuals who use the bikes during commute hours and
+weekdays.</p>
+<p>It might be worth it to try a personalized online newsletter campaign
+to target these groups. They may be interested to sign up for annual
+membership. You can also try to give them some discounts if they have
+used the bikes several times if you are confident you can convert
+them.</p>
+<p><b>3. Create interesting digital campaigns around the most popular
+stations for casuals</b></p>
+<p>You can try to create interesting digital campaigns around the most
+popular stations for casuals. For example, create a with big banner with
+QR code “scan me to get a free ride”, and put it around <b>Streeter Dr
+&amp; Grand Ave</b>. When you catch the casual riders’ attention, they
+may use their phone to scan the QR code, and this QR code will lead them
+to a landing page where you give them 15-30 days free trial if they sign
+up for annual memberships.</p>
+<p>You need to use A/B testing to see which campaigns work to attract
+their attention.</p>
 </div>
 
 

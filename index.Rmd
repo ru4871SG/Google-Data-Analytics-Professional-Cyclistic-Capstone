@@ -54,7 +54,7 @@ The datasets were loaded into RStudio, and then previewed, cleaned, filtered, me
 For the sake of my own learning purposes, I also re-analyzed the same datasets using SQL with BigQuery. The analysis results are consistent between SQL and R.
 
 Feel free to check
-<a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/process.html" target="_blank">my data cleaning and analysis process in R</a> as well as <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/misc.html" target="_blank">my data cleaning and analysis process in SQL</a>.<br><br><br>
+<a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/process.html" target="_blank">my data cleaning and analysis process in R</a> as well as the <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/misc.html" target="_blank">alternative steps in SQL</a>.<br><br><br>
 
 # Analysis Results
 <hr>
@@ -92,7 +92,7 @@ The second interactive map shows popular stations for members. Here we can see t
 ### Popular Hours
 
 ![](vizzes/ggarrange_popular_hours_comparison.png){width="100%"}
-From the above data vizualization, you can see how both casuals and members like to use Cyclistic bikes between 15-18 (3PM - 6PM). 
+From the above data viz, you can see how both casuals and members like to use Cyclistic bikes between 15-18 (3PM - 6PM). 
 
 However, casuals have higher trip counts between 20-22 (8PM - 10PM), whereas members have lower trip counts for the same hours.
 

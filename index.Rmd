@@ -23,13 +23,13 @@ Cyclistic is a fictional bike-share company in Chicago with over 5,800 bicycles 
 
 Cyclistic customers who purchase single-ride or full-day passes are referred to as casual riders (or casuals), whereas customers who purchase annual memberships are referred to as members. 
 
-As of February 2022, Cyclistic pricing plans are as follow:
+As of February 2022, Cyclistic pricing plans are as follows:
 
 - Single-ride: \$1 to unlock, plus \$0.39 per minute
 - Full-day pass: \$15/day
 - Annual membership: \$10/month
 
-Cyclistic's director of marketing believes the company’s future will depend on maximizing the number of annual memberships. With this objective in mind, the company wants to learn how casual riders and annual members may use Cyclistic services differently, and how to use digital media to convert Cyclistic casual riders to become members.<br><br><br>
+Cyclistic's director of marketing believes the company’s future will depend on maximizing the number of annual memberships. With this objective in mind, the company wants to learn how casual riders and annual members may use Cyclistic services differently and how to use digital media to convert Cyclistic casual riders to become members.<br><br><br>
 
 # Datasets
 <hr>

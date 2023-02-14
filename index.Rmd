@@ -72,7 +72,7 @@ Daily routines (e.g., work commute) don't always change throughout the year, but
 
 To analyze this hypothesis further, let's see how members and casuals compare between the days without including the dates.<br>
 
-![](vizzes/ggplot_day_of_week_count.png){width="80%"}
+![](vizzes/ggplot_day_of_week_count.png){width="90%"}
 
 Here everything looks clearer. Members use Cyclistic bikes more on weekdays, whereas casuals prefer to use them on weekends. This should confirm our previous analysis regarding how casuals use Cyclistic bikes for hobbies and leisures, and how they don't really use Cyclistic bikes for work commute and other weekday routines.<br><br>
 
@@ -101,7 +101,7 @@ On the other hand, morning time (7AM - 9AM) seems to be more popular for members
 
 All the findings above have proven our previous hypothesis where members may use the bikes more often for weekday routines, like work commute.<br>
 
-![](vizzes/ggplot_ride_length_avg.png){width="80%"}
+![](vizzes/ggplot_ride_length_avg.png){width="90%"}
 
 Meanwhile, average ride length from casuals and members also differ greatly. Casuals' average ride length in minutes is 24.28 minutes, while members' average ride length in minutes is 12.68 minutes. 
 

@@ -11,7 +11,7 @@
 
 
 
-<title>Data Analysis Process</title>
+<title>Data Analysis Process with R</title>
 
 <script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -322,10 +322,10 @@ div.tocify {
   <a href="index.html">Report</a>
 </li>
 <li>
-  <a href="process.html">Data Analysis Process</a>
+  <a href="process.html">Data Analysis Process with R</a>
 </li>
 <li>
-  <a href="misc.html">Misc</a>
+  <a href="misc.html">Data Analysis Process with SQL</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -339,19 +339,19 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Data Analysis Process</h1>
-<h4 class="date"><code>Feb 14, 2023</code></h4>
+<h1 class="title toc-ignore">Data Analysis Process with R</h1>
 
 </div>
 
 
+<p><br></p>
 <div id="explanation" class="section level1">
 <h1>Explanation</h1>
 <hr>
-<p>This page explains all the steps that I personally used for my data
-cleaning, transformation, and analyses with RStudio. Everything that you
-see on the
-<a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/index.html" target="_blank">Report
+<p>This page explains all the processes for my data cleaning,
+transformation, and analyses with RStudio. Everything that you see on
+the
+<a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/index.html">Report
 page</a> was made possible thanks to all the steps explained below.</p>
 <p>And I also re-created all the below steps using SQL with BigQuery for
 my learning purposes. The analysis results are consistent between SQL
@@ -563,7 +563,7 @@ been cleaned as well.<br><br></p>
 </div>
 <div id="b.-most-popular-stations-for-casuals" class="section level3">
 <h3>9b. Most Popular Stations for Casuals</h3>
-<p>let’s start with <code>end_station_name</code>:</p>
+<p>let’s start with <code>start_station_name</code>:</p>
 <pre class="r"><code>start_station_name_count_casual &lt;- cyclistic_2022_cleaned %&gt;% filter(member_casual == &#39;casual&#39;) %&gt;% group_by(start_station_name) %&gt;% count(start_station_name)</code></pre>
 <p><br> Next, do the same for <code>end_station_name</code>:</p>
 <pre class="r"><code>end_station_name_count_casual &lt;- cyclistic_2022_cleaned %&gt;% filter(member_casual == &#39;casual&#39;) %&gt;% group_by(end_station_name) %&gt;% count(end_station_name)</code></pre>

@@ -1,6 +1,5 @@
 ---
-title: "Data Analysis Process"
-date: "`Feb 14, 2023`"
+title: "Data Analysis Process with R"
 output:
   html_document:
     toc: true
@@ -14,10 +13,11 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
+<br>
 
 # Explanation
 <hr>
-This page explains all the steps that I personally used for my data cleaning, transformation, and analyses with RStudio. Everything that you see on the <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/index.html">Report page</a> was made possible thanks to all the steps explained below.
+This page explains all the processes for my data cleaning, transformation, and analyses with RStudio. Everything that you see on the <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/index.html">Report page</a> was made possible thanks to all the steps explained below.
 
 And I also re-created all the below steps using SQL with BigQuery for my learning purposes. The analysis results are consistent between SQL and R.
 <br><br><br>
@@ -240,7 +240,7 @@ station_name_count_member <- station_name_count_member %>% select(-n.x, -n.y) %>
 Now the column name looks better, and unnecessary columns have been cleaned as well.<br><br>
 
 ### 9b. Most Popular Stations for Casuals
-let's start with `end_station_name`:
+let's start with `start_station_name`:
 ```{r, eval=F, echo=T}
 start_station_name_count_casual <- cyclistic_2022_cleaned %>% filter(member_casual == 'casual') %>% group_by(start_station_name) %>% count(start_station_name)
 ```

@@ -14,11 +14,11 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
-
+<br>
 This case study on Cyclistic is my capstone project for Google Data Analytics Professional Certificate Program. My name is Ruddy Setiadi Gunawan, and you can find my report below. 
 
 Feel free to also check my data cleaning and analysis process by going to the
-<a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/process.html" target="_blank">Process page</a><br><br><br>
+<a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/process.html" target="_blank">data analysis process in R page</a>.<br><br><br>
 
 # Introduction
 <hr>

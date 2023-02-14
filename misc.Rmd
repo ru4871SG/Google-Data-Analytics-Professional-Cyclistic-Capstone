@@ -1,5 +1,5 @@
 ---
-title: "Misc"
+title: "Data Analysis Process with SQL"
 output:
   html_document:
     toc: true
@@ -13,116 +13,466 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
+<br>
 
-IMPORTANT: Test by Ruddy - You can delete everything in here and start fresh. You might want to start by not deleting anything above this line until you know what that stuff is doing.
+# Explanation
+<hr>
+Below I explain all the steps that I took in SQL for my data analysis process. I believe it's important to do this case study with both SQL and R. The idea is to become more proficient in both. 
+
+Before you go further with this page, I strongly recommend you to read my <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/process.html">data analysis process in R</a>. Over there, I have much better explanation for everything.
+
+Here you can find the alternative steps in SQL, however, I won't write much details here because I don't want to keep repeating myself to explain the same steps.
+
+*Note: My project folder in BigQuery is called `coursera-test-367602`. That's why you keep seeing this project folder in the below steps.
+
+<br><br><br>
+
+# 1. Import Datasets to BigQuery
+<hr>
+I can't import half of the datasets directly. Datasets from May 2022 to October 2022 are larger than 100 MB. I have to convert these large files to Excel Workbook files, and then, I need to make sure to use `yyyy-mm-dd h:mm:ss` format for some of the columns.<br><br>
+
+# 2. Slice Larger Files to Two Different Sheets 
+<hr>
+By slicing them with Microsoft Excel, the file sizes will be smaller (this is needed to bypass the 100 MB limitation in BigQuery). For example, <b>may_1.csv</b> and <b>may_2.csv</b>, <b>june_1.csv</b> and <b>june_2.csv</b>, and so on. The rest of csv which originally are less than 100 MB, I don't need to slice them. Import all to BigQuery.
 
 
-This is an .Rmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a \# in front of your text, it will create a top level-header.
-
-# My first post
-
-2018 | 7 | 23 Last compiled: `r Sys.Date()`
-
-Notice that whatever you define as a top level header, automatically gets put into the table of contents bar on the left. 
-
-## Second level header
-
-You can add more headers by adding more hashtags. These won't be put into the table of contents
-
-### third level header
-
-Here's an even lower level header
-
-# My second post (note the order)
-
-2018 | 7 | 23 Last compiled: `r Sys.Date()`
-
-I'm writing this tutorial going from the top down. And, this is how it will be printed. So, notice the second post is second in the list. If you want your most recent post to be at the top, then make a new post starting at the top. If you want the oldest first, do, then keep adding to the bottom
-
-# Adding R stuff
-
-So far this is just a blog where you can write in plain text and serve your writing to a webpage. One of the main purposes of this lab journal is to record your progress learning R. The reason I am asking you to use this process is because you can both make a website, and a lab journal, and learn R all in R-studio. This makes everything really convenient and in the sam place. 
-
-So, let's say you are learning how to make a histogram in R. For example, maybe you want to sample 100 numbers from a normal distribution with mean = 0, and standard deviation =1, and then you want to plot a histogram. You can do this right here by using an r code block, like this:
-
-```{r}
-samples <- rnorm(100, mean=0, sd=1)
-hist(samples)
+# 3. Use UNION ALL for All Imported Tables
+<hr>
+```{r, eval=F, echo=T}
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202201`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202202`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202203`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202204`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202205`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202206`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202207`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202208`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202209`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202210`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202211`
+UNION ALL 
+SELECT *
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_tripdata_202212`
 ```
+<br>
+This will stack all the sheets on top of each other into one year. It works like `bind_rows()` in R, but `UNION ALL` is in SQL.<br><br>
 
-When you knit this R Markdown document, you will see that the histogram is printed to the page, along with the R code. This document can be set up to hide the R code in the webpage, just delete the comment (hashtag), from the cold folding option in the yaml header up top. For purposes of letting yourself see the code, and me see the code, best to keep it the way that it is. You learn all of these things and more can be customized in each R code block.
-
-# The big idea
-
-Use this lab journal to record what you do in R. This way I will be able to see what you are doing and help you along the way. You will also be creating a repository of all the things you do. You can make posts about everything. Learning specific things in R (project unrelated), and doing things for the project that we will discuss at the beginning of the Fall semester. You can get started now by fiddling around with googling things, and trying stuff out in R. I've placed some helpful starting links in the links page on this website
-
-# What can you do right now by yourself?
-
-It's hard to learn programming when you don't have specific problems that you are trying to solve. Everything just seems abstract.
-
-I wrote an [introductory programming book that introduces R](https://crumplab.github.io/programmingforpsych/), and gives some [concrete problems for you to solve](https://crumplab.github.io/programmingforpsych/programming-challenges-i-learning-the-fundamentals.html). 
-
-To get the hang of journaling and solving the problems to learn programming, my suggestion is that you use this .Rmd file to solve the problems. It would look like this:
-
-# Problem 1
-
-Do simple math with numbers, addition, subtraction, multiplication, division
-
-```{r}
-1+2
-2*5
-5/3
-(1+6+4)/5
-
+# 4. Sort Table
+<hr>
+```{r, eval=F, echo=T}
+SELECT * FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_full`
+ORDER BY started_at
 ```
+<br><br>
 
-# Problem 2
-
-Put numbers into variables, do simple math on the variables
-
-```{r}
-a<-1
-b<-2
-a+b
-
-d<-c(1,2,3)
-e<-c(5,6,7)
-d+e
-d*e
-d/e
-
+# 5. Calculate ride_length and day_of_week
+<hr>
+```{r, eval=F, echo=T}
+SELECT *,
+    FORMAT("%02d:%02d:%02d",
+        EXTRACT(HOUR FROM ride_length_preformatted),
+        EXTRACT(MINUTE FROM ride_length_preformatted),
+        EXTRACT(SECOND FROM ride_length_preformatted)) AS ride_length,
+        EXTRACT(HOUR FROM ride_length_preformatted) AS hour,
+        EXTRACT(MINUTE FROM ride_length_preformatted) AS minute,
+        EXTRACT(SECOND FROM ride_length_preformatted) AS second,
+    EXTRACT(DAYOFWEEK FROM started_at) AS day_of_week
+FROM (
+  SELECT *,
+       ended_at - started_at AS ride_length_preformatted
+  FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_full_sorted`
+)
+AS add_ride_length
+ORDER BY ride_length
 ```
+<br>
+Save it to `cyclistic_2022_precleaned`<br><br>
 
-# Problem 3
-
-Write code that will place the numbers 1 to 100 separately into a variable using for loop. Then, again using the seq function.
-
-```{r}
-# for loop solution
-# i becomes the number 1 to 100 at each step of the loop
-
-
-a <- length(100) # make empty variable, set length to 100
-for (i in 1:100){
-  a[i] <-i #assigns the number in i, to the ith index of a
-}
-
-print(a)
-
-# for loop solution #2
-
-a<-c() #create empty variable using combine command
-for (i in 1:100){
-  a<-c(a,i) # keeps combining a with itself and the new number in i
-}
-print(a)
-
-# seq solution
-a <- seq(1,100,1) # look up help for seq using ?seq() in console
-print(a)
-
+# 6. Premature Data Cleaning
+<hr>
+```{r, eval=F, echo=T}
+SELECT *
+FROM (SELECT *, 
+      (hour * 3600) + (minute * 60) + second AS total_seconds
+      FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+)
+  AS with_total_seconds
+WHERE total_seconds >= 60
+ORDER BY total_seconds
 ```
+<br>
+Once there is no negative ride_length anymore, filter out `NULL` values as well, the main query ends up like this:
+```{r, eval=F, echo=T}
+SELECT * 
+FROM (SELECT *, 
+      (hour * 3600) + (minute * 60) + second AS total_seconds
+      FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+)
+  AS with_total_seconds
+WHERE total_seconds >= 60
+  AND minute > 0
+  AND start_station_name IS NOT NULL
+  AND start_station_id IS NOT NULL
+  AND end_station_name IS NOT NULL
+  AND end_station_id IS NOT NULL
+  AND ride_id IS NOT NULL
+  AND rideable_type IS NOT NULL
+  AND started_at IS NOT NULL
+  AND ended_at IS NOT NULL
+  AND start_lat IS NOT NULL
+  AND start_lng IS NOT NULL
+  AND end_lat IS NOT NULL
+  AND end_lng IS NOT NULL
+  AND member_casual IS NOT NULL
+```
+<br><br>
 
-# Replace this with problem 4
+# 7. Check Other Possibilities for Further Data Cleaning
+<hr>
+Next, check other possibilities with the second query tab:
+```{r, eval=F, echo=T}
+SELECT * 
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+WHERE UPPER(start_station_name) = start_station_name
+```
+<br>
+Let's do the same for `end_station_name`:
+```{r, eval=F, echo=T}
+SELECT * 
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+WHERE UPPER(end_station_name) = end_station_name
+```
+<br>
+Then, let's check if any row has the word "test" or "Test" or "TEST", who knows there are test related trips.
+```{r, eval=F, echo=T}
+SELECT * 
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+WHERE start_station_name LIKE "%TEST%"
+  OR start_station_name LIKE "%test%"
+  OR start_station_name LIKE "%Test%"
+  OR start_station_id LIKE "%TEST%"
+  OR start_station_id LIKE "%test%"
+  OR start_station_id LIKE "%Test%"
+  OR end_station_name LIKE "%TEST%"
+  OR end_station_name LIKE "%test%"
+  OR end_station_name LIKE "%Test%"
+  OR end_station_id LIKE "%TEST%"
+  OR end_station_id LIKE "%test%"
+  OR end_station_id LIKE "%Test%"
+```
+<br>
+Just like how I've explained it in the data analysis process with R page, this step is very important to find out what types of row values that need to be filtered.
+<br><br>
 
-And keep going. Try to solve the problems with different scripts that provide the same solution. Good luck, Happy coding.
+# 8. Final Data Cleaning
+<hr>
+```{r, eval=F, echo=T}	
+UPDATE `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+SET start_station_name = REPLACE(start_station_name, '*', '')
+
+UPDATE `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+SET start_station_name = REPLACE(start_station_name, '(Temp)', '')
+
+UPDATE `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+SET start_station_name = REPLACE(start_station_name, '- Charging', '')
+
+
+UPDATE `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+SET end_station_name = REPLACE(end_station_name, '*', '')
+
+UPDATE `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+SET end_station_name = REPLACE(end_station_name, '(Temp)', '')
+
+UPDATE `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+SET end_station_name = REPLACE(end_station_name, '- Charging', '')
+```	
+<br>
+Once the table is updated, let's use this:
+```{r, eval=F, echo=T}	
+SELECT DISTINCT ride_id, rideable_type, started_at, ended_at, TRIM(start_station_name) AS start_station_name, TRIM(end_station_name) AS end_station_name, start_station_id, end_station_id, start_lat, start_lng, end_lat, end_lng, TRIM(member_casual) AS member_casual, ride_length, total_seconds, day_of_week 
+FROM (SELECT *, 
+      (hour * 3600) + (minute * 60) + second AS total_seconds
+      FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_precleaned` 
+)
+  AS with_total_seconds
+
+WHERE total_seconds >=60 
+  AND start_station_name IS NOT NULL
+  AND start_station_id IS NOT NULL
+  AND end_station_name IS NOT NULL
+  AND end_station_id IS NOT NULL
+  AND ride_id IS NOT NULL
+  AND rideable_type IS NOT NULL
+  AND started_at IS NOT NULL
+  AND ended_at IS NOT NULL
+  AND start_lat IS NOT NULL
+  AND start_lng IS NOT NULL
+  AND end_lat IS NOT NULL
+  AND end_lng IS NOT NULL
+  AND member_casual IS NOT NULL
+  AND UPPER(start_station_name) != start_station_name
+  AND UPPER(end_station_name) != end_station_name
+  AND start_station_name NOT LIKE "%TEST%"
+  AND start_station_name NOT LIKE "%test%"
+  AND start_station_name NOT LIKE "%Test%"
+  AND start_station_id NOT LIKE "%TEST%"
+  AND start_station_id NOT LIKE "%test%"
+  AND start_station_id NOT LIKE "%Test%"
+  AND end_station_name NOT LIKE "%TEST%"
+  AND end_station_name NOT LIKE "%test%"
+  AND end_station_name NOT LIKE "%Test%"
+  AND end_station_id NOT LIKE "%TEST%"
+  AND end_station_id NOT LIKE "%test%"
+  AND end_station_id NOT LIKE "%Test%"
+ORDER BY started_at
+```	
+<br>
+Save the result to `cyclistic_2022_postcleaned`<br><br>
+
+# 9. Analyze Most Popular Station Count
+<hr>
+### 9a. Most Popular Stations for Members
+let's start with `start_station_name`:
+```{r, eval=F, echo=T}
+SELECT start_station_name AS station, COUNT(start_station_name) AS start_station_name_count
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned` 
+WHERE member_casual = 'member'
+GROUP BY start_station_name
+ORDER BY start_station_name_count DESC
+```
+<br>
+Now, let's do the same for `end_station_name`:
+```{r, eval=F, echo=T}
+SELECT end_station_name AS station, COUNT(end_station_name) AS end_station_name_count
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned` 
+WHERE member_casual = 'member'
+GROUP BY end_station_name
+ORDER BY end_station_name_count DESC
+```
+<br>
+Save both of the above results as new tables, save them as `start_station_name_count_member` and `end_station_name_count_member`. Next, let's use `FULL OUTER JOIN`:
+```{r, eval=F, echo=T}
+SELECT 
+  CASE WHEN start_station.station IS NOT NULL THEN start_station.station
+  ELSE end_station.station
+  END AS station_name_both,
+  
+CASE WHEN start_station_name_count IS NOT NULL AND end_station_name_count IS NOT NULL THEN start_station_name_count + end_station_name_count
+  WHEN start_station_name_count IS NULL THEN end_station_name_count
+  ELSE start_station_name_count
+  END AS station_count_both
+FROM 
+  `coursera-test-367602.cyclistic_case_study.start_station_name_count_member` AS start_station -- COMMENT: TABLE 1
+FULL OUTER JOIN
+  `coursera-test-367602.cyclistic_case_study.end_station_name_count_member` AS end_station -- COMMENT: TABLE 2
+  ON start_station.station = end_station.station 
+ORDER BY station_count_both DESC
+```
+I save it as `count_station_name_member`
+<br><br>
+
+### 9b. Most Popular Stations for Casuals
+let's start with `start_station_name`:
+```{r, eval=F, echo=T}
+SELECT start_station_name AS station, COUNT(start_station_name) AS start_station_name_count
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned` 
+WHERE member_casual = 'casual'
+GROUP BY start_station_name
+ORDER BY start_station_name_count DESC
+```
+<br>
+Next, let's do the same for `end_station_name`:
+```{r, eval=F, echo=T}
+SELECT end_station_name AS station, COUNT(end_station_name) AS end_station_name_count
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned` 
+WHERE member_casual = 'casual'
+GROUP BY end_station_name
+ORDER BY end_station_name_count DESC
+```
+<br>
+Save both of the above results as new tables, `start_station_name_count_casual` and `end_station_name_count_casual`. And just like before, use `FULL OUTER JOIN`:
+```{r, eval=F, echo=T}
+SELECT 
+  CASE WHEN start_station.station IS NOT NULL THEN start_station.station
+  ELSE end_station.station
+  END AS station_name_both,
+  
+CASE WHEN start_station_name_count IS NOT NULL AND end_station_name_count IS NOT NULL THEN start_station_name_count + end_station_name_count
+  WHEN start_station_name_count IS NULL THEN end_station_name_count
+  ELSE start_station_name_count
+  END AS station_count_both
+FROM 
+  `coursera-test-367602.cyclistic_case_study.start_station_name_count_casual` AS start_station -- COMMENT: TABLE 1
+FULL OUTER JOIN
+  `coursera-test-367602.cyclistic_case_study.end_station_name_count_casual` AS end_station -- COMMENT: TABLE 2
+  ON start_station.station = end_station.station 
+ORDER BY station_count_both DESC
+```
+<br>
+I save it as `count_station_name_casual`
+<br><br>
+
+# 10. Analyze Popular Days of Week and Dates
+<hr>
+```{r, eval=F, echo=T}
+SELECT day_of_week, member_casual, COUNT(day_of_week) AS day_of_week_count 
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned` 
+GROUP BY day_of_week, member_casual
+ORDER BY day_of_week_count DESC
+```
+<br>
+Save this result as `count_day_of_week`. Next:
+```{r, eval=F, echo=T}
+SELECT day_of_week, member_casual, month, COUNT(month) AS month_count
+FROM (
+SELECT *,
+      EXTRACT (MONTH FROM started_at) AS month
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned` 
+WHERE member_casual = 'casual'
+)
+  AS with_clean_date
+GROUP BY month, day_of_week, member_casual
+ORDER BY month_count DESC
+```
+<br>
+and
+```{r, eval=F, echo=T}
+SELECT day_of_week, member_casual, month, COUNT(month) AS month_count
+FROM (
+SELECT *,
+      EXTRACT (MONTH FROM started_at) AS month
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned` 
+WHERE member_casual = 'member'
+)
+  AS with_clean_date
+GROUP BY month, day_of_week, member_casual
+ORDER BY month_count DESC
+```
+<br>
+Save both results, as `count_popular_dates_casual` and `count_popular_dates_member`.<br><br>
+
+# 11. Analyze Most Popular Hours of the Day
+<hr>
+Let's start with total count for all (both casual and member):
+```{r, eval=F, echo=T}
+SELECT clean_hour, COUNT(clean_hour) AS clean_hour_count
+FROM (
+SELECT *, 
+    FORMAT("%02d",
+        EXTRACT(HOUR FROM started_at)) AS clean_hour
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned` 
+)
+  AS with_clean_hour
+GROUP BY clean_hour
+ORDER BY clean_hour_count DESC
+```
+<br>
+Next, let's divide them by the casual or member groups.
+```{r, eval=F, echo=T}
+SELECT clean_hour, COUNT(clean_hour) AS clean_hour_count, member_casual
+FROM (
+SELECT *, 
+    FORMAT("%02d",
+        EXTRACT(HOUR FROM started_at)) AS clean_hour
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned` 
+WHERE member_casual = 'member' 
+)
+  AS with_clean_hour
+GROUP BY clean_hour, member_casual
+ORDER BY clean_hour_count DESC
+```
+<br>
+and
+```{r, eval=F, echo=T}
+SELECT clean_hour, COUNT(clean_hour) AS clean_hour_count, member_casual
+FROM (
+SELECT *, 
+    FORMAT("%02d",
+        EXTRACT(HOUR FROM started_at)) AS clean_hour
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned` 
+WHERE member_casual = 'casual' 
+)
+  AS with_clean_hour
+GROUP BY clean_hour, member_casual
+ORDER BY clean_hour_count DESC
+```
+<br>
+Let's save both of the above queries as `count_popular_hours_casual` and `count_popular_hours_member`.<br><br>
+
+# 12. Analyze Ride Length Difference Between Casual and Member
+<hr>
+```{r, eval=F, echo=T}
+SELECT AVG(total_seconds / 60) AS avg_ride_length_in_minutes, member_casual 
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned`
+GROUP BY member_casual
+ORDER BY avg_ride_length_in_minutes DESC
+```
+<br><br>
+
+# 13. Analyze Bike Types
+<hr>
+Let's start with this:
+```{r, eval=F, echo=T}
+SELECT member_casual, rideable_type, COUNT(*) AS trips
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned`
+GROUP BY rideable_type, member_casual
+ORDER BY trips DESC
+```
+<br>
+Save this result as `count_rideable_type`. Next:
+```{r, eval=F, echo=T}
+SELECT member_casual, COUNT(*) AS total_trips
+FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned`
+GROUP BY member_casual
+ORDER BY total_trips DESC
+```
+<br>
+Save this result as `count_member_vs_casual`. Now let's use `JOIN`:
+```{r, eval=F, echo=T}
+SELECT rideable_type_count.member_casual AS member_casual,
+       rideable_type_count.rideable_type AS rideable_type,
+       rideable_type_count.trips AS trips_each_type,
+       member_vs_casual.total_trips AS total_trips,
+       (rideable_type_count.trips / member_vs_casual.total_trips) AS trips_percentage
+FROM `coursera-test-367602.cyclistic_case_study.count_rideable_type` AS rideable_type_count
+JOIN
+  `coursera-test-367602.cyclistic_case_study.count_member_vs_casual` AS member_vs_casual
+  ON rideable_type_count.member_casual = member_vs_casual.member_casual
+```
+<br>
+Save this result as `count_and_percentage_rideable_type`. Now, let's split them by casual and member groups:
+```{r, eval=F, echo=T}
+SELECT member_casual, rideable_type, trips_percentage 
+FROM `coursera-test-367602.cyclistic_case_study.count_and_percentage_rideable_type`
+WHERE member_casual = 'casual' 
+```
+<br>
+and
+```{r, eval=F, echo=T}
+SELECT member_casual, rideable_type, trips_percentage 
+FROM `coursera-test-367602.cyclistic_case_study.count_and_percentage_rideable_type`
+WHERE member_casual = 'member'
+```
+<br>
+Save both results as `casual_rideable_type` and `member_rideable_type`. That's it. Export all the saved results and visualize them with R.

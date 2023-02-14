@@ -4,8 +4,8 @@ navbar:
   left:
     - text: "Report"
       href: index.html
-    - text: "Data Analysis Process"
+    - text: "Data Analysis Process with R"
       href: process.html
-    - text: "Misc"
+    - text: "Data Analysis Process with SQL"
       href: misc.html
 output_dir: "docs"

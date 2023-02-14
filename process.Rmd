@@ -1,5 +1,6 @@
 ---
-title: "Journal"
+title: "Data Analysis Process"
+date: "`Feb 14, 2023`"
 output:
   html_document:
     toc: true
@@ -14,115 +15,753 @@ output:
 knitr::opts_chunk$set(message=FALSE,warning=FALSE, cache=TRUE)
 ```
 
-IMPORTANT: Test by Ruddy - You can delete everything in here and start fresh. You might want to start by not deleting anything above this line until you know what that stuff is doing.
+# Explanation
+<hr>
+This page explains all the steps that I personally used for my data cleaning, transformation, and analyses with RStudio. Everything that you see on the <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/index.html" target="_blank">Report page</a> was made possible thanks to all the steps explained below.
 
+And I also re-created all the below steps using SQL with BigQuery for my learning purposes. The analysis results are consistent between SQL and R.
+<br><br><br>
 
-This is an .Rmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a \# in front of your text, it will create a top level-header.
+# 1. Download Datasets and Rename Them
+<hr>
+Download Divvy Bikes trip data from January 2022 up to December 2022. There are 12 .csv files in total. Rename all the .csv files to <b>cyclistic_tripdata_202201.csv</b>, <b>cyclistic_tripdata_202202.csv</b>, etc. to make them look consistent.<br><br>
 
-# My first post
+# 2. Import Data to Rstudio and Preview Them
+<hr>
+Import all the CSVs to Rstudio:
 
-2018 | 7 | 23 Last compiled: `r Sys.Date()`
+```{r, eval=F, echo=T}
+cyclistic_202201 <- read_csv("cyclistic_tripdata_202201.csv")
+cyclistic_202202 <- read_csv("cyclistic_tripdata_202202.csv")
+cyclistic_202203 <- read_csv("cyclistic_tripdata_202203.csv")
+cyclistic_202204 <- read_csv("cyclistic_tripdata_202204.csv")
+cyclistic_202205 <- read_csv("cyclistic_tripdata_202205.csv")
+cyclistic_202206 <- read_csv("cyclistic_tripdata_202206.csv")
+cyclistic_202207 <- read_csv("cyclistic_tripdata_202207.csv")
+cyclistic_202208 <- read_csv("cyclistic_tripdata_202208.csv")
+cyclistic_202209 <- read_csv("cyclistic_tripdata_202209.csv")
+cyclistic_202210 <- read_csv("cyclistic_tripdata_202210.csv")
+cyclistic_202211 <- read_csv("cyclistic_tripdata_202211.csv")
+cyclistic_202212 <- read_csv("cyclistic_tripdata_202212.csv")
+```
+<br>
+Next, preview all of them:
+```{r, eval=F, echo=T}
+str(cyclistic_202201)
+str(cyclistic_202202)
+str(cyclistic_202203)
+str(cyclistic_202204)
+str(cyclistic_202205)
+str(cyclistic_202206)
+str(cyclistic_202207)
+str(cyclistic_202208)
+str(cyclistic_202209)
+str(cyclistic_202210)
+str(cyclistic_202211)
+str(cyclistic_202212)
+```
+<br>
+Looks like all of them are consistent. both `started_at` and `ended-at` are already in <i>POSIXct</i>. No need to change any data type. `start_station_id` and `end_station_id` are also in <i>chr</i> already.<br><br> 
 
-Notice that whatever you define as a top level header, automatically gets put into the table of contents bar on the left. 
+# 3. Merge All of Them
+<hr>
+Merge all of them:
+```{r, eval=F, echo=T}
+cyclistic_2022 <- bind_rows(
+     cyclistic_202201, cyclistic_202202, cyclistic_202203, cyclistic_202204,
+     cyclistic_202205, cyclistic_202206, cyclistic_202207, cyclistic_202208,
+     cyclistic_202209, cyclistic_202210, cyclistic_202211, cyclistic_202212
+ )
+```
+<br><br>
 
-## Second level header
+# 4. Sort Dataset
+<hr>
+Next, sort `cyclistic_2022` by `started_at` to ensure the first row is the oldest:
+```{r, eval=F, echo=T}
+cyclistic_2022 <- cyclistic_2022 %>% arrange(started_at)
+```
+<br><br>
 
-You can add more headers by adding more hashtags. These won't be put into the table of contents
+# 5. Calculate ride_length and day_of_week
+<hr>
+Prior to data cleaning, it's better to calculate `ride_length` and `day_of_week`:
+```{r, eval=F, echo=T}
+cyclistic_2022 <- cyclistic_2022 %>% mutate(ride_length = ended_at - started_at)
+```
+<br>
+and
+```{r, eval=F, echo=T}
+cyclistic_2022$day_of_week <- wday(cyclistic_2022$started_at)
+```
+Both day_of_week and ride_length will be used for further analyses.<br><br>
 
-### third level header
+# 6. Premature Data Cleaning
+<hr>
+According to Divvy's data policy, anything below 60 seconds should not be included.
 
-Here's an even lower level header
+Let's just filter out all the negative values, and anything below 60 secs:
+```{r, eval=F, echo=T}
+cyclistic_2022_cleaned <- cyclistic_2022 %>% filter(!(ride_length < 60))
+```
+<br>
+Once we find out there is no negative ride_length anymore, we leave out all the `NULL` values as well:
+```{r, eval=F, echo=T}
+cyclistic_2022_cleaned <- cyclistic_2022_cleaned %>% drop_na()
+```
+<br><br>
 
-# My second post (note the order)
+# 7. Check Other Possibilities for Further Data Cleaning
+<hr>
+Check all uppercase or all lowercase values to find naming inconsistencies. Let's go back to the pre-cleaned data frame just to preview all the inconsistencies.
+```{r, eval=F, echo=T}
+check_df <- cyclistic_2022 %>% filter(toupper(start_station_name) == start_station_name)
+```
+<br>
+looks like there are some "test" or "maintenance" station names and IDs. For example, some `start_station_name rows` are 
+<b>WEST CHI-WATSON</b> which show the `start_station_id` as <b>DIVVY 001 - Warehouse test station</b>. This needs to be filtered.
 
-2018 | 7 | 23 Last compiled: `r Sys.Date()`
+Next, let's investigate `end_station_name`:
+```{r, eval=F, echo=T}
+check_df <- cyclistic_2022 %>% filter(toupper(end_station_name) == end_station_name)
+```
+<br>
+Just like before, there are couple of rows with value <b>DIVVY CASSETTE REPAIR MOBILE STATION</b>, which means this is just used for maintenance, not for actual trips. This needs to be filtered as well.
 
-I'm writing this tutorial going from the top down. And, this is how it will be printed. So, notice the second post is second in the list. If you want your most recent post to be at the top, then make a new post starting at the top. If you want the oldest first, do, then keep adding to the bottom
+However, there is no result for `filter(tolower())` for both `start_station_name` and `end_station_name`.
 
-# Adding R stuff
+Next, let's check if any row has the word "test" or "Test" or "TEST":
+```{r, eval=F, echo=T}
+check_df <- cyclistic_2022 %>% 
+    filter(str_detect(start_station_name, "test|Test|TEST") | 
+               str_detect(end_station_name, "test|Test|TEST") | 
+               str_detect(start_station_id, "test|Test|TEST") | 
+               str_detect(end_station_id, "test|Test|TEST"))
+```
+<br>
+Looks like there are plenty of <b>Hubbard Bike-checking (LBS-WH-TEST)</b>, <b>Pawel Bialowas - Test- PBSC charging station</b> and <b>DIVVY 001 - Warehouse test station</b>.
 
-So far this is just a blog where you can write in plain text and serve your writing to a webpage. One of the main purposes of this lab journal is to record your progress learning R. The reason I am asking you to use this process is because you can both make a website, and a lab journal, and learn R all in R-studio. This makes everything really convenient and in the sam place. 
+I assume these are test trips. They need to be filtered too.<br><br>
 
-So, let's say you are learning how to make a histogram in R. For example, maybe you want to sample 100 numbers from a normal distribution with mean = 0, and standard deviation =1, and then you want to plot a histogram. You can do this right here by using an r code block, like this:
+# 8. Final Data Cleaning
+<hr>
+Let's go back to `cyclistic_2022_cleaned` (step 6 above), and include all of the findings from step 7:
+```{r, eval=F, echo=T}	
+cyclistic_2022_cleaned <- cyclistic_2022_cleaned %>% filter(toupper(start_station_name) != start_station_name) %>% filter(toupper(end_station_name) != end_station_name) %>% 
+	    filter(!str_detect(start_station_name, "test|Test|TEST") & 
+	               !str_detect(end_station_name, "test|Test|TEST") & 
+	               !str_detect(start_station_id, "test|Test|TEST") & 
+	               !str_detect(end_station_id, "test|Test|TEST"))
+```	
+<br>
+To ensure there's no duplicate id, let's check with `duplicated()`:
+```{r, eval=F, echo=T}	
+cyclistic_2022_cleaned[!duplicated(cyclistic_2022_cleaned$ride_id), ]
+```	
+<br>
+Apparently, there are exact same number of rows as before. All good, no need to save this.
 
-```{r}
-samples <- rnorm(100, mean=0, sd=1)
-hist(samples)
+Next, let's detect if there are trailing/leading spaces and other unnecessary symbols. 
+
+After checking the `start_station_name` and `end_station_name` manually, I found out that there is a certain symbol used after the end of the station name, which is <b>*</b>. 
+
+I also found out that certain stations ended up with <b>(Temp)</b> and <b>- Charging</b>. To avoid duplicate station names during analysis stage later on, these stations should be cleaned as well.
+
+We clean the data by using gsub():
+```{r, eval=F, echo=T}
+cyclistic_2022_cleaned$start_station_name <- gsub("\\*", "", cyclistic_2022_cleaned$start_station_name)
+
+cyclistic_2022_cleaned$start_station_name <- gsub("\\(Temp)", "", cyclistic_2022_cleaned$start_station_name)
+
+cyclistic_2022_cleaned$start_station_name <- gsub("\\ - Charging", "", cyclistic_2022_cleaned$start_station_name)
+```	
+<br>
+Let's do the same for `end_station_name`:
+```{r, eval=F, echo=T}
+cyclistic_2022_cleaned$end_station_name <- gsub("\\*", "", cyclistic_2022_cleaned$end_station_name)
+	
+cyclistic_2022_cleaned$end_station_name <- gsub("\\(Temp)", "", cyclistic_2022_cleaned$end_station_name)
+	
+cyclistic_2022_cleaned$end_station_name <- gsub("\\ - Charging", "", cyclistic_2022_cleaned$end_station_name)
+```
+<br>
+And then, for the rest of data cleaning:
+```{r, eval=F, echo=T}
+cyclistic_2022_cleaned$start_station_name <- gsub("^\\s+|\\s+$", "", cyclistic_2022_cleaned$start_station_name)
+
+cyclistic_2022_cleaned$end_station_name <- gsub("^\\s+|\\s+$", "", cyclistic_2022_cleaned$end_station_name)
+
+cyclistic_2022_cleaned$member_casual <- gsub("^\\s+|\\s+$", "", cyclistic_2022_cleaned$member_casual)
+
+cyclistic_2022_cleaned$rideable_type <- gsub("^\\s+|\\s+$", "", cyclistic_2022_cleaned$rideable_type)
+
+cyclistic_2022_cleaned$start_station_id <- gsub("^\\s+|\\s+$", "", cyclistic_2022_cleaned$start_station_id)
+
+cyclistic_2022_cleaned$end_station_id <- gsub("^\\s+|\\s+$", "", cyclistic_2022_cleaned$end_station_id)
+```
+<br>
+Above steps ensures no trailing/leading whitespaces and unnecessary symbols in the naming processes.<br><br>
+
+# 9. Analyze Most Popular Station Count
+<hr>
+### 9a. Most Popular Stations for Members
+
+Let's study which `start_station_name` has the highest count. Let's analyze both `start_station_name` and `end_station_name`. Also, it's important to separate them based on membership types (casual vs. member). Let's begin with `start_station_name`:
+```{r, eval=F, echo=T}
+start_station_name_count_member <- cyclistic_2022_cleaned %>% filter(member_casual == 'member') %>% group_by(start_station_name) %>% count(start_station_name)
+```
+<br>
+Now, let's do the same for `end_station_name`:
+```{r, eval=F, echo=T}
+end_station_name_count_member <- cyclistic_2022_cleaned %>% filter(member_casual == 'member') %>% group_by(end_station_name) %>% count(end_station_name)
+```
+<br>
+Apparently, some of the same stations still conquer the top results.
+
+Now let's use `full_join` to combine them:
+```{r, eval=F, echo=T}
+station_name_count_member <- full_join(start_station_name_count_member, end_station_name_count_member, by = c("start_station_name"="end_station_name"))
+```
+<br>
+and then, use `if-else` statement to get the total counts:
+```{r, eval=F, echo=T}
+station_name_count_member <- station_name_count_member %>% mutate(n_total = if(!any(is.na(c(n.x, n.y)))) { n.x + n.y } else if(is.na(n.y)) { n.x } else { n.y })
+```
+<br>
+The above line will create a result where it shows the total count from both `start_station_name` and `end_station_name`. 
+
+Next, re-organize the data a little bit so they look better:
+```{r, eval=F, echo=T}
+station_name_count_member <- rename(station_name_count_member, station_name = start_station_name)
+
+station_name_count_member <- station_name_count_member %>% select(-n.x, -n.y) %>% arrange(desc(n_total))
+```
+<br>
+Now the column name looks better, and unnecessary columns have been cleaned as well.<br><br>
+
+### 9b. Most Popular Stations for Casuals
+let's start with `end_station_name`:
+```{r, eval=F, echo=T}
+start_station_name_count_casual <- cyclistic_2022_cleaned %>% filter(member_casual == 'casual') %>% group_by(start_station_name) %>% count(start_station_name)
+```
+<br>
+Next, do the same for `end_station_name`:
+```{r, eval=F, echo=T}
+end_station_name_count_casual <- cyclistic_2022_cleaned %>% filter(member_casual == 'casual') %>% group_by(end_station_name) %>% count(end_station_name)
+```
+<br>
+And just like before, use `full_join`:
+```{r, eval=F, echo=T}
+station_name_count_casual <- full_join(start_station_name_count_casual, end_station_name_count_casual, by = c("start_station_name"="end_station_name"))
+```
+<br>
+Now let's use `if-else` statement:
+```{r, eval=F, echo=T}
+station_name_count_casual <- station_name_count_casual %>% mutate(n_total = if(!any(is.na(c(n.x, n.y)))) { n.x + n.y } else if(is.na(n.y)) { n.x } else { n.y })
+```
+<br>
+Next, re-organize the data a little bit:
+```{r, eval=F, echo=T}
+station_name_count_casual <- rename(station_name_count_casual, station_name = start_station_name)
+
+station_name_count_casual <- station_name_count_casual %>% select(-n.x, -n.y) %>% arrange(desc(n_total))
+```
+<br><br>
+
+# 10. Analyze Popular Days of Week and Dates
+<hr>
+Let's see which day is the most popular:
+```{r, eval=F, echo=T}
+cyclistic_2022_cleaned %>% group_by(day_of_week) %>% count(day_of_week) %>% arrange(desc(n))
+```
+<br>
+After running above code, I found out that Saturday (day 7) is the most popular, while Monday (day 2) is the least popular.  Next, separate them by member and casual:
+```{r, eval=F, echo=T}
+day_of_week_count <- cyclistic_2022_cleaned %>% group_by(day_of_week, member_casual) %>% count(day_of_week) %>% arrange(desc(n))
+```
+<br>
+For now let's save this result as `day_of_week_count`. With the member filter, I found out that several of the most popular trips were on Wednesday and Thursday (day 4 and 5). Whereas for casuals, Saturday and Sunday (day 7 and day 1) were more popular.
+	
+Next, let's analyze the popular dates and group them by either week or month. First, let's get the week and month to check them better:
+```{r, eval=F, echo=T}	
+	clean_week_and_month <- cyclistic_2022_cleaned %>% mutate(week = week(started_at), month = month(started_at)) 
+```
+<br>
+After some considerations, I believe analyzing the data by month makes more sense and much simpler than by week, because we will try to see if the trends change following the seasons in the city of Chicago.  In this case, let's differentiate the most popular dates between members and casuals to see their differences:
+
+```{r, eval=F, echo=T}	
+popular_dates_member_count <- clean_week_and_month %>% filter(member_casual == 'member') %>% group_by(month, day_of_week) %>% count(month) %>% arrange(desc(n))
+```	
+<br>
+and
+```{r, eval=F, echo=T}	
+	popular_dates_casual_count <- clean_week_and_month %>% filter(member_casual == 'casual') %>% group_by(month, day_of_week) %>% count(month) %>% arrange(desc(n))
+```	
+<br>
+From a quick glance, the trends look different between them.
+<br><br>
+
+# 11. Analyze Most Popular Hours of the Day
+<hr>
+After analyzing popular days of week and dates, time to do similar analysis, but for the hours.
+
+Let's start with total count for all (both casual and member):
+```{r, eval=F, echo=T}
+clean_hour <- cyclistic_2022_cleaned
+
+clean_hour$started_at <- format(clean_hour$started_at, "%H")
+
+clean_hour %>% group_by(started_at) %>% count(started_at) %>% arrange(desc(n))
+```
+<br>
+From above codes, looks like 3PM to 6PM are more popular. Next, let's divide them by the casual or member groups.
+```{r, eval=F, echo=T}
+popular_hours_member_count <- clean_hour %>% filter(member_casual == 'member') %>% group_by(started_at, member_casual) %>% count(started_at) %>% arrange(desc(n))
+```
+<br>
+and
+```{r, eval=F, echo=T}
+popular_hours_casual_count <- clean_hour %>% filter(member_casual == 'casual') %>% group_by(started_at, member_casual) %>% count(started_at) %>% arrange(desc(n))
+```
+<br>
+It looks like members are more likely to use the bikes for work commute and weekday routines. On the other hand, casuals don't use the bikes as much during the commute hours in the morning, but they still use the bikes often during commute hours in the evening. Casuals also have more tendency to use the bikes around 8-10 PM as compared to members.<br><br>
+
+# 12. Analyze ride_length Difference Between Casual and Member
+<hr>
+Earlier, I calculated the `ride_length` by calculating the difference between `started_at` and `ended_at`.
+
+To calculate `average ride_length` in minutes, let's just convert `ride_length` to minutes:
+```{r, eval=F, echo=T}
+ride_length_avg <- cyclistic_2022_cleaned %>% mutate(ride_length_in_minutes = as.numeric(ride_length / 60)) %>% group_by(member_casual) %>% summarize(avg_ride_length_in_minutes = mean(ride_length_in_minutes))
+```
+<br>
+Above code provides `average ride_length` in minutes, and compare them between members and casuals.<br><br>
+
+# 13. Analyze Bike Types
+<hr>
+Let's start with this:
+```{r, eval=F, echo=T}
+rideable_type_count <- cyclistic_2022_cleaned %>% group_by(rideable_type, member_casual) %>% count(rideable_type) %>% arrange(desc(n))
+```
+<br>
+Next, check how many total trips they have between members vs. casuals:
+```{r, eval=F, echo=T}
+member_vs_casual_count <- cyclistic_2022_cleaned %>% group_by(member_casual) %>% count(member_casual) %>% arrange(desc(n))
+```
+<br>
+From above code, looks like members make much more trips as compared to casuals. For further analysis, use `inner join` and `mutate` to see the percentages from each group:
+```{r, eval=F, echo=T}
+rideable_type_count_and_percentage <- inner_join(rideable_type_count, member_vs_casual_count, by = c("member_casual"="member_casual")) %>% mutate(trips_percentage = n.x / n.y)
+```
+<br>
+The above code will allow us to see the percentage of members that use classic bikes vs. electric bikes, and percentage of casuals that use classic bikes vs. electric bikes. vs docked bikes. 
+
+After I checked `rideable_type_count_and_percentage`, I realized it's better to separate the `member_casual` group:
+```{r, eval=F, echo=T}
+rideable_type_casual <- rideable_type_count_and_percentage %>% filter(member_casual == 'casual') %>% select(-n.x, -n.y)
+```
+<br>
+and
+```{r, eval=F, echo=T}
+rideable_type_member <- rideable_type_count_and_percentage %>% filter(member_casual == 'member') %>% select(-n.x, -n.y)
+```
+<br><br>
+
+# 14. Pre-Visualization - Find Latitude and Longitude:
+<hr>
+Before data visualization, it's important to get latitude and longitude for the station names. I will visualize the station name counts with `leaflet`, so it's important to get an external dataset for this. 
+
+Get the .csv file from here: <a href="https://data.cityofchicago.org/Transportation/Divvy-Bicycle-Stations/bbyy-e7gq/data#revert" target=_blank>https://data.cityofchicago.org</a>
+
+Change the column name from <b>Station Name</b> to <b>Station_Name</b> so it will be easier to analyze and clean.
+
+Then, go back to RStudio:
+```{r, eval=F, echo=T}
+divvy_bicycle_stations <- read_csv("Divvy_Bicycle_Stations.csv")
+```
+<br>
+Next, need to clean `divvy_bicycle_stations` because some station names have <b>*</b>, <b>(Temp)</b>, and <b>- Charging</b>, just like before. Since I have combined duplicate station names in the analysis stage before, I need to make sure to have the same consistent naming process here. Because the idea here is to get the latitude and longitude with `join()` function.
+
+The cleaning process:
+```{r, eval=F, echo=T}
+divvy_bicycle_stations$Station_Name <- gsub("\\*", "", divvy_bicycle_stations$Station_Name)
+
+divvy_bicycle_stations$Station_Name <- gsub("\\(Temp)", "", divvy_bicycle_stations$Station_Name)
+
+divvy_bicycle_stations$Station_Name <- gsub("\\ - Charging", "", divvy_bicycle_stations$Station_Name)
+
+divvy_bicycle_stations$Station_Name <- gsub("^\\s+|\\s+$", "", divvy_bicycle_stations$Station_Name)
+```
+<br>
+Then use `left_join` to include the latitude and longitude numbers:
+```{r, eval=F, echo=T}
+station_name_count_member_with_location <- left_join(station_name_count_member, divvy_bicycle_stations, by = c("station_name"="Station_Name"))
+```
+<br>
+It looks like some stations still do not have latitude and longitude values. It turns out that the dataset from <i>cityofchicago</i> is not complete enough. Let's export `station_name_count_member_with_location` to .csv and let's handle the rest of latitude and longitude manually with Excel.
+
+I manually included latitude and longitude by going to google maps and even just manually searching for them in the cityofchicago website. I filled in all the latitude and longitude numbers manually in Excel, after I used <b>Conditional Formatting</b> to highlight <b>NA</b> values. 
+
+Next, let's save the updated .csv file to the Rstudio folder, and let's import it back:
+```{r, eval=F, echo=T}
+station_name_count_member_with_location <- read_csv("updated_station_name_count_member_with_location.csv")
+```
+<br>
+Now everything looks much better.
+
+And since I have manually updated the .csv earlier using Excel, I can just overwrite `divvy_bicycle_stations` with the updated longitude and latitude, and then use `left_join` for `station_name_count_casual`:
+```{r, eval=F, echo=T}
+divvy_bicycle_stations <- station_name_count_member_with_location %>% select(-n_total)
+
+station_name_count_casual_with_location <- left_join(station_name_count_casual, divvy_bicycle_stations, by = c("station_name"="station_name"))
+```
+<br>
+These two files with latitude and longitude, I will visualize them with leaflet.<br><br>
+
+# 15. Data Visualization
+<hr>
+
+###	1. Leaflet for station_name_count_casual:
+
+```{r, eval=F, echo=T}
+mypalette2 <- colorBin(
+    palette ="plasma",
+    domain = station_name_count_casual_with_location$n_total,
+    na.color = "transparent", 
+    bins = 6
+)
+```
+<br>
+then
+```{r, eval=F, echo=T}
+mytext2 <- paste(
+    "<b>Station:</b>", station_name_count_casual_with_location$station_name, "<br />",
+    "<b>Counts:</b>", station_name_count_casual_with_location$n_total) %>%
+    lapply(htmltools::HTML)
+```
+<br>
+then
+```{r, eval=F, echo=T}
+leaflet_for_station_name_count_casual <- leaflet(station_name_count_casual_with_location) %>%
+    addTiles() %>%
+    setView(
+        lng = -87.6298, lat = 41.8781, zoom = 12
+    ) %>%
+    
+    addCircleMarkers(
+        ~ Longitude, ~ Latitude, 
+        fillColor = ~ mypalette2(n_total), 
+        fillOpacity = 0.7, 
+        color = "white", 
+        radius = 7, 
+        stroke = FALSE,
+        label = mytext2,
+        labelOptions = labelOptions(
+            style = list( 
+                "font-weight" = "normal", 
+                padding = "3px 8px"
+            ), 
+            textsize = "13px", 
+            direction = "auto"
+        ) 
+    ) %>%
+    
+    addLegend( 
+        pal = mypalette2, 
+        values = ~ n_total, 
+        opacity = 0.9,
+        title = "Station Name Counts", 
+        position = "bottomright"
+    )
+```
+<br><br>
+
+###	2. Leaflet for station_name_count_member:
+
+```{r, eval=F, echo=T}
+mypalette <- colorBin(
+    palette ="plasma",
+    domain = station_name_count_member_with_location$n_total,
+    na.color = "transparent", 
+    bins = 6
+)
+```
+<br>
+then
+```{r, eval=F, echo=T}
+mytext <- paste(
+    "<b>Station:</b>", station_name_count_member_with_location$station_name, "<br />",
+    "<b>Counts:</b>", station_name_count_member_with_location$n_total) %>%
+    lapply(htmltools::HTML)
+```
+<br>
+then
+```{r, eval=F, echo=T}
+leaflet_for_station_name_count_member <- leaflet(station_name_count_member_with_location) %>%
+    addTiles() %>%
+    setView(
+        lng = -87.6298, lat = 41.8781, zoom = 12
+    ) %>%
+    
+    addCircleMarkers(
+        ~ Longitude, ~ Latitude, 
+        fillColor = ~ mypalette(n_total), 
+        fillOpacity = 0.7, 
+        color = "white", 
+        radius = 7, 
+        stroke = FALSE,
+        label = mytext,
+        labelOptions = labelOptions(
+            style = list( 
+                "font-weight" = "normal", 
+                padding = "3px 8px"
+            ), 
+            textsize = "13px", 
+            direction = "auto"
+        ) 
+    ) %>%
+    
+    addLegend( 
+        pal = mypalette, 
+        values = ~ n_total, 
+        opacity = 0.9,
+        title = "Station Name Counts", 
+        position = "bottomright"
+    )
+```
+<br><br>
+
+###	3. GGPlot for Popular Dates:
+
+```{r, eval=F, echo=T}
+ggplot_popular_dates_casual_count <- ggplot(
+    popular_dates_casual_count, 
+    aes(
+        x = month,
+        y = day_of_week,
+        fill = n
+    )
+) + 
+    
+    geom_tile (
+        color = "white",
+        na.rm = FALSE
+    ) +
+    
+    scale_fill_viridis_b(
+        option = "plasma",
+        direction = 1,
+        name = "Trip Counts"
+    ) +
+    
+    scale_x_continuous(
+        breaks = seq(length = 12),
+        labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    ) +
+    
+    scale_y_continuous(
+        breaks = seq(length = 7),
+        labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+    ) +
+    
+    ylab("") + xlab("") + labs(title = "Casual") +
+    
+    theme(legend.text = element_text(size = 20),
+          legend.title = element_text(size = 22),
+          axis.text.x = element_text(size = 20),
+          axis.text.y = element_text(size = 20),
+          plot.title = element_text(size = 25, color = "#1b9e77")
+    )
+```
+<br>
+then
+```{r, eval=F, echo=T}
+ggplot_popular_dates_member_count <- ggplot(
+    popular_dates_member_count, 
+    aes(
+        x = month,
+        y = day_of_week,
+        fill = n
+    )
+) + 
+    
+    geom_tile (
+        color = "white",
+        na.rm = FALSE
+    ) +
+    
+    scale_fill_viridis_b(
+        option = "plasma",
+        direction = 1,
+        name = "Trip Counts"
+    ) +
+    
+    scale_x_continuous(
+        breaks = seq(length = 12),
+        labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    ) +
+    
+    scale_y_continuous(
+        breaks = seq(length = 7),
+        labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+    ) +
+    
+    ylab("") + xlab("") + labs(title = "Member") +
+    
+    theme(legend.text = element_text(size = 20),
+          legend.title = element_text(size = 22),
+          axis.text.x = element_text(size = 20),
+          axis.text.y = element_text(size = 20),
+          plot.title = element_text(size = 25, color = "#d95f02")
+    )
+```
+<br>
+Next, combine them using `ggarrange()`:
+```{r, eval=F, echo=T}
+ggarrange_popular_dates_comparison <- ggarrange(
+    ggplot_popular_dates_casual_count, 
+    ggplot_popular_dates_member_count, 
+    ncol = 1, 
+    nrow = 2,
+    common.legend = TRUE, 
+    legend = "right"
+)
+```
+<br><br>
+
+###	4. GGPlot for Days of Week:
+```{r, eval=F, echo=T}
+ggplot_day_of_week_count <- ggplot(day_of_week_count, 
+       aes(y=n, x=day_of_week, fill=member_casual)) + 
+    
+    geom_bar(position="dodge", stat="identity") +
+    
+    scale_x_continuous(
+        breaks = seq(length = 7),
+        labels = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+    ) +
+    
+    scale_y_continuous(
+        labels = scales::comma
+    ) +
+    
+    scale_fill_brewer(palette = "Dark2", name = "") +
+    
+    ylab("") + xlab("") + 
+    
+    theme(legend.text = element_text(size = 20),
+    legend.position = "bottom",
+    axis.text.x = element_text(size = 20),
+    axis.text.y = element_text(size = 20)
+    )
+```
+<br><br>
+	
+###	5. GGPlot for Popular Hours:
+
+```{r, eval=F, echo=T}
+ggplot_popular_hours_casual_count <- ggplot(popular_hours_casual_count, 
+       aes(y=n, x=started_at)) + 
+    
+    geom_bar(position="dodge", stat="identity", fill="#1b9e77") +
+    
+    coord_polar(start = 0) +
+    
+    theme_minimal() +
+    
+    labs(title="Casual") +
+    
+    theme(axis.text.y = element_blank(),
+          axis.title = element_blank(),
+          axis.text.x = element_text(size = 18),
+          plot.title = element_text(size = 25, color = "#1b9e77", hjust = 0.5),
+          panel.grid.major = element_line(size = 0.5, color = "grey"),
+          panel.grid.minor = element_line(size = 0.25, color = "grey")
+    )
+```
+<br>
+then
+```{r, eval=F, echo=T}
+ggplot_popular_hours_member_count <- ggplot(popular_hours_member_count, 
+                                            aes(y=n, x=started_at)) + 
+    
+    geom_bar(position="dodge", stat="identity", fill="#d95f02") +
+    
+    coord_polar(start = 0) +
+    
+    theme_minimal() +
+    
+    labs(title="Member") +
+    
+    theme(axis.text.y = element_blank(),
+          axis.title = element_blank(),
+          axis.text.x = element_text(size = 18),
+          plot.title = element_text(size = 25, color = "#d95f02", hjust = 0.5),
+          panel.grid.major = element_line(size = 0.5, color = "grey"),
+          panel.grid.minor = element_line(size = 0.25, color = "grey")
+    )
+```
+<br>
+and then, combine them using `ggarrange()`:
+```{r, eval=F, echo=T}
+ggarrange_popular_hours_comparison <- ggarrange(
+    ggplot_popular_hours_casual_count, 
+    ggplot_popular_hours_member_count, 
+    nrow = 1,
+    common.legend = TRUE)
+```
+<br><br>
+
+### 6. GGplot for Avg. Ride Length:
+
+```{r, eval=F, echo=T}
+ggplot_ride_length_avg <- ggplot(ride_length_avg, 
+       aes(y=member_casual, x=avg_ride_length_in_minutes, fill=member_casual)) + 
+    
+    geom_bar(position="dodge", stat="identity") +
+    
+    scale_fill_brewer(palette = "Dark2", name = "") +
+    
+    ylab("") + xlab("") + labs(title="Average Ride Length (Minutes)") +
+    
+    theme(legend.text = element_text(size = 40),
+          legend.position = "bottom",
+          axis.text.x = element_text(size = 40),
+          axis.text.y = element_text(size = 40),
+          plot.title = element_text(size = 50)
+    )
+```
+<br><br>
+
+### 7. Plotly for the Pie Charts:
+
+```{r, eval=F, echo=T}
+plotly_rideable_type_casual <- plot_ly(rideable_type_casual, labels = ~rideable_type, values = ~trips_percentage, type = 'pie',
+        textposition = 'inside',
+        textinfo = 'label+percent',
+        insidetextfont = list(color = '#FFFFFF', size = 20),
+        hoverinfo = 'text',
+        text = ~rideable_type,
+        marker = list(colors = colors,
+                      line = list(color = '#FFFFFF', width = 1)),
+        showlegend = FALSE) %>% 
+    layout(annotations = list(x = 0.3, y = 1.05, text = "Casual", showarrow = F, xref='paper', yref='paper', xanchor='right', yanchor='auto', xshift=0, yshift=0, font=list(size=25, color = '#1b9e77')))
+```
+<br>
+and:
+```{r, eval=F, echo=T}
+plotly_rideable_type_member <- plot_ly(rideable_type_member, labels = ~rideable_type, values = ~trips_percentage, type = 'pie',
+       textposition = 'inside',
+       textinfo = 'label+percent',
+        insidetextfont = list(color = '#FFFFFF', size = 20),
+       hoverinfo = 'text',
+       text = ~rideable_type,
+       marker = list(colors = colors,
+                     line = list(color = '#FFFFFF', width = 1)),
+       showlegend = FALSE) %>% 
+    layout(annotations = list(x = 0.3, y = 1.05, text = "Member", showarrow = F, xref='paper', yref='paper', xanchor='right', yanchor='auto', xshift=0, yshift=0, font=list(size=25, color = '#d95f02')))
 ```
 
-When you knit this R Markdown document, you will see that the histogram is printed to the page, along with the R code. This document can be set up to hide the R code in the webpage, just delete the comment (hashtag), from the cold folding option in the yaml header up top. For purposes of letting yourself see the code, and me see the code, best to keep it the way that it is. You learn all of these things and more can be customized in each R code block.
-
-# The big idea
-
-Use this lab journal to record what you do in R. This way I will be able to see what you are doing and help you along the way. You will also be creating a repository of all the things you do. You can make posts about everything. Learning specific things in R (project unrelated), and doing things for the project that we will discuss at the beginning of the Fall semester. You can get started now by fiddling around with googling things, and trying stuff out in R. I've placed some helpful starting links in the links page on this website
-
-# What can you do right now by yourself?
-
-It's hard to learn programming when you don't have specific problems that you are trying to solve. Everything just seems abstract.
-
-I wrote an [introductory programming book that introduces R](https://crumplab.github.io/programmingforpsych/), and gives some [concrete problems for you to solve](https://crumplab.github.io/programmingforpsych/programming-challenges-i-learning-the-fundamentals.html). 
-
-To get the hang of journaling and solving the problems to learn programming, my suggestion is that you use this .Rmd file to solve the problems. It would look like this:
-
-# Problem 1
-
-Do simple math with numbers, addition, subtraction, multiplication, division
-
-```{r}
-1+2
-2*5
-5/3
-(1+6+4)/5
-
-```
-
-# Problem 2
-
-Put numbers into variables, do simple math on the variables
-
-```{r}
-a<-1
-b<-2
-a+b
-
-d<-c(1,2,3)
-e<-c(5,6,7)
-d+e
-d*e
-d/e
-
-```
-
-# Problem 3
-
-Write code that will place the numbers 1 to 100 separately into a variable using for loop. Then, again using the seq function.
-
-```{r}
-# for loop solution
-# i becomes the number 1 to 100 at each step of the loop
-
-
-a <- length(100) # make empty variable, set length to 100
-for (i in 1:100){
-  a[i] <-i #assigns the number in i, to the ith index of a
-}
-
-print(a)
-
-# for loop solution #2
-
-a<-c() #create empty variable using combine command
-for (i in 1:100){
-  a<-c(a,i) # keeps combining a with itself and the new number in i
-}
-print(a)
-
-# seq solution
-a <- seq(1,100,1) # look up help for seq using ?seq() in console
-print(a)
-
-```
-
-# Replace this with problem 4
-
-And keep going. Try to solve the problems with different scripts that provide the same solution. Good luck, Happy coding.
+I don't use `subplot()` to merge above plotly charts, I just combine the exported images manually.

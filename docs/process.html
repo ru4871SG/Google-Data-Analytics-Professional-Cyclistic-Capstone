@@ -11,7 +11,7 @@
 
 
 
-<title>Journal</title>
+<title>Data Analysis Process</title>
 
 <script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -339,166 +339,695 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Journal</h1>
+<h1 class="title toc-ignore">Data Analysis Process</h1>
+<h4 class="date"><code>Feb 14, 2023</code></h4>
 
 </div>
 
 
-<p>IMPORTANT: Test by Ruddy - You can delete everything in here and
-start fresh. You might want to start by not deleting anything above this
-line until you know what that stuff is doing.</p>
-<p>This is an .Rmd file. It is plain text with special features. Any
-time you write just like this, it will be compiled to normal text in the
-website. If you put a # in front of your text, it will create a top
-level-header.</p>
-<div id="my-first-post" class="section level1">
-<h1>My first post</h1>
-<p>2018 | 7 | 23 Last compiled: 2023-02-12</p>
-<p>Notice that whatever you define as a top level header, automatically
-gets put into the table of contents bar on the left.</p>
-<div id="second-level-header" class="section level2">
-<h2>Second level header</h2>
-<p>You can add more headers by adding more hashtags. These won’t be put
-into the table of contents</p>
-<div id="third-level-header" class="section level3">
-<h3>third level header</h3>
-<p>Here’s an even lower level header</p>
+<div id="explanation" class="section level1">
+<h1>Explanation</h1>
+<hr>
+<p>This page explains all the steps that I personally used for my data
+cleaning, transformation, and analyses with RStudio. Everything that you
+see on the
+<a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/index.html" target="_blank">Report
+page</a> was made possible thanks to all the steps explained below.</p>
+<p>And I also re-created all the below steps using SQL with BigQuery for
+my learning purposes. The analysis results are consistent between SQL
+and R. <br><br><br></p>
 </div>
+<div id="download-datasets-and-rename-them" class="section level1">
+<h1>1. Download Datasets and Rename Them</h1>
+<hr>
+<p>Download Divvy Bikes trip data from January 2022 up to December 2022.
+There are 12 .csv files in total. Rename all the .csv files to
+<b>cyclistic_tripdata_202201.csv</b>,
+<b>cyclistic_tripdata_202202.csv</b>, etc. to make them look
+consistent.<br><br></p>
 </div>
+<div id="import-data-to-rstudio-and-preview-them"
+class="section level1">
+<h1>2. Import Data to Rstudio and Preview Them</h1>
+<hr>
+<p>Import all the CSVs to Rstudio:</p>
+<pre class="r"><code>cyclistic_202201 &lt;- read_csv(&quot;cyclistic_tripdata_202201.csv&quot;)
+cyclistic_202202 &lt;- read_csv(&quot;cyclistic_tripdata_202202.csv&quot;)
+cyclistic_202203 &lt;- read_csv(&quot;cyclistic_tripdata_202203.csv&quot;)
+cyclistic_202204 &lt;- read_csv(&quot;cyclistic_tripdata_202204.csv&quot;)
+cyclistic_202205 &lt;- read_csv(&quot;cyclistic_tripdata_202205.csv&quot;)
+cyclistic_202206 &lt;- read_csv(&quot;cyclistic_tripdata_202206.csv&quot;)
+cyclistic_202207 &lt;- read_csv(&quot;cyclistic_tripdata_202207.csv&quot;)
+cyclistic_202208 &lt;- read_csv(&quot;cyclistic_tripdata_202208.csv&quot;)
+cyclistic_202209 &lt;- read_csv(&quot;cyclistic_tripdata_202209.csv&quot;)
+cyclistic_202210 &lt;- read_csv(&quot;cyclistic_tripdata_202210.csv&quot;)
+cyclistic_202211 &lt;- read_csv(&quot;cyclistic_tripdata_202211.csv&quot;)
+cyclistic_202212 &lt;- read_csv(&quot;cyclistic_tripdata_202212.csv&quot;)</code></pre>
+<p><br> Next, preview all of them:</p>
+<pre class="r"><code>str(cyclistic_202201)
+str(cyclistic_202202)
+str(cyclistic_202203)
+str(cyclistic_202204)
+str(cyclistic_202205)
+str(cyclistic_202206)
+str(cyclistic_202207)
+str(cyclistic_202208)
+str(cyclistic_202209)
+str(cyclistic_202210)
+str(cyclistic_202211)
+str(cyclistic_202212)</code></pre>
+<p><br> Looks like all of them are consistent. both
+<code>started_at</code> and <code>ended-at</code> are already in
+<i>POSIXct</i>. No need to change any data type.
+<code>start_station_id</code> and <code>end_station_id</code> are also
+in <i>chr</i> already.<br><br></p>
 </div>
-<div id="my-second-post-note-the-order" class="section level1">
-<h1>My second post (note the order)</h1>
-<p>2018 | 7 | 23 Last compiled: 2023-02-12</p>
-<p>I’m writing this tutorial going from the top down. And, this is how
-it will be printed. So, notice the second post is second in the list. If
-you want your most recent post to be at the top, then make a new post
-starting at the top. If you want the oldest first, do, then keep adding
-to the bottom</p>
+<div id="merge-all-of-them" class="section level1">
+<h1>3. Merge All of Them</h1>
+<hr>
+<p>Merge all of them:</p>
+<pre class="r"><code>cyclistic_2022 &lt;- bind_rows(
+     cyclistic_202201, cyclistic_202202, cyclistic_202203, cyclistic_202204,
+     cyclistic_202205, cyclistic_202206, cyclistic_202207, cyclistic_202208,
+     cyclistic_202209, cyclistic_202210, cyclistic_202211, cyclistic_202212
+ )</code></pre>
+<p><br><br></p>
 </div>
-<div id="adding-r-stuff" class="section level1">
-<h1>Adding R stuff</h1>
-<p>So far this is just a blog where you can write in plain text and
-serve your writing to a webpage. One of the main purposes of this lab
-journal is to record your progress learning R. The reason I am asking
-you to use this process is because you can both make a website, and a
-lab journal, and learn R all in R-studio. This makes everything really
-convenient and in the sam place.</p>
-<p>So, let’s say you are learning how to make a histogram in R. For
-example, maybe you want to sample 100 numbers from a normal distribution
-with mean = 0, and standard deviation =1, and then you want to plot a
-histogram. You can do this right here by using an r code block, like
-this:</p>
-<pre class="r"><code>samples &lt;- rnorm(100, mean=0, sd=1)
-hist(samples)</code></pre>
-<p><img src="process_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<p>When you knit this R Markdown document, you will see that the
-histogram is printed to the page, along with the R code. This document
-can be set up to hide the R code in the webpage, just delete the comment
-(hashtag), from the cold folding option in the yaml header up top. For
-purposes of letting yourself see the code, and me see the code, best to
-keep it the way that it is. You learn all of these things and more can
-be customized in each R code block.</p>
+<div id="sort-dataset" class="section level1">
+<h1>4. Sort Dataset</h1>
+<hr>
+<p>Next, sort <code>cyclistic_2022</code> by <code>started_at</code> to
+ensure the first row is the oldest:</p>
+<pre class="r"><code>cyclistic_2022 &lt;- cyclistic_2022 %&gt;% arrange(started_at)</code></pre>
+<p><br><br></p>
 </div>
-<div id="the-big-idea" class="section level1">
-<h1>The big idea</h1>
-<p>Use this lab journal to record what you do in R. This way I will be
-able to see what you are doing and help you along the way. You will also
-be creating a repository of all the things you do. You can make posts
-about everything. Learning specific things in R (project unrelated), and
-doing things for the project that we will discuss at the beginning of
-the Fall semester. You can get started now by fiddling around with
-googling things, and trying stuff out in R. I’ve placed some helpful
-starting links in the links page on this website</p>
+<div id="calculate-ride_length-and-day_of_week" class="section level1">
+<h1>5. Calculate ride_length and day_of_week</h1>
+<hr>
+<p>Prior to data cleaning, it’s better to calculate
+<code>ride_length</code> and <code>day_of_week</code>:</p>
+<pre class="r"><code>cyclistic_2022 &lt;- cyclistic_2022 %&gt;% mutate(ride_length = ended_at - started_at)</code></pre>
+<p><br> and</p>
+<pre class="r"><code>cyclistic_2022$day_of_week &lt;- wday(cyclistic_2022$started_at)</code></pre>
+<p>Both day_of_week and ride_length will be used for further
+analyses.<br><br></p>
 </div>
-<div id="what-can-you-do-right-now-by-yourself" class="section level1">
-<h1>What can you do right now by yourself?</h1>
-<p>It’s hard to learn programming when you don’t have specific problems
-that you are trying to solve. Everything just seems abstract.</p>
-<p>I wrote an <a
-href="https://crumplab.github.io/programmingforpsych/">introductory
-programming book that introduces R</a>, and gives some <a
-href="https://crumplab.github.io/programmingforpsych/programming-challenges-i-learning-the-fundamentals.html">concrete
-problems for you to solve</a>.</p>
-<p>To get the hang of journaling and solving the problems to learn
-programming, my suggestion is that you use this .Rmd file to solve the
-problems. It would look like this:</p>
+<div id="premature-data-cleaning" class="section level1">
+<h1>6. Premature Data Cleaning</h1>
+<hr>
+<p>According to Divvy’s data policy, anything below 60 seconds should
+not be included.</p>
+<p>Let’s just filter out all the negative values, and anything below 60
+secs:</p>
+<pre class="r"><code>cyclistic_2022_cleaned &lt;- cyclistic_2022 %&gt;% filter(!(ride_length &lt; 60))</code></pre>
+<p><br> Once we find out there is no negative ride_length anymore, we
+leave out all the <code>NULL</code> values as well:</p>
+<pre class="r"><code>cyclistic_2022_cleaned &lt;- cyclistic_2022_cleaned %&gt;% drop_na()</code></pre>
+<p><br><br></p>
 </div>
-<div id="problem-1" class="section level1">
-<h1>Problem 1</h1>
-<p>Do simple math with numbers, addition, subtraction, multiplication,
-division</p>
-<pre class="r"><code>1+2</code></pre>
-<pre><code>## [1] 3</code></pre>
-<pre class="r"><code>2*5</code></pre>
-<pre><code>## [1] 10</code></pre>
-<pre class="r"><code>5/3</code></pre>
-<pre><code>## [1] 1.666667</code></pre>
-<pre class="r"><code>(1+6+4)/5</code></pre>
-<pre><code>## [1] 2.2</code></pre>
+<div id="check-other-possibilities-for-further-data-cleaning"
+class="section level1">
+<h1>7. Check Other Possibilities for Further Data Cleaning</h1>
+<hr>
+<p>Check all uppercase or all lowercase values to find naming
+inconsistencies. Let’s go back to the pre-cleaned data frame just to
+preview all the inconsistencies.</p>
+<pre class="r"><code>check_df &lt;- cyclistic_2022 %&gt;% filter(toupper(start_station_name) == start_station_name)</code></pre>
+<p><br> looks like there are some “test” or “maintenance” station names
+and IDs. For example, some <code>start_station_name rows</code> are
+<b>WEST CHI-WATSON</b> which show the <code>start_station_id</code> as
+<b>DIVVY 001 - Warehouse test station</b>. This needs to be
+filtered.</p>
+<p>Next, let’s investigate <code>end_station_name</code>:</p>
+<pre class="r"><code>check_df &lt;- cyclistic_2022 %&gt;% filter(toupper(end_station_name) == end_station_name)</code></pre>
+<p><br> Just like before, there are couple of rows with value <b>DIVVY
+CASSETTE REPAIR MOBILE STATION</b>, which means this is just used for
+maintenance, not for actual trips. This needs to be filtered as
+well.</p>
+<p>However, there is no result for <code>filter(tolower())</code> for
+both <code>start_station_name</code> and
+<code>end_station_name</code>.</p>
+<p>Next, let’s check if any row has the word “test” or “Test” or
+“TEST”:</p>
+<pre class="r"><code>check_df &lt;- cyclistic_2022 %&gt;% 
+    filter(str_detect(start_station_name, &quot;test|Test|TEST&quot;) | 
+               str_detect(end_station_name, &quot;test|Test|TEST&quot;) | 
+               str_detect(start_station_id, &quot;test|Test|TEST&quot;) | 
+               str_detect(end_station_id, &quot;test|Test|TEST&quot;))</code></pre>
+<p><br> Looks like there are plenty of <b>Hubbard Bike-checking
+(LBS-WH-TEST)</b>, <b>Pawel Bialowas - Test- PBSC charging station</b>
+and <b>DIVVY 001 - Warehouse test station</b>.</p>
+<p>I assume these are test trips. They need to be filtered
+too.<br><br></p>
 </div>
-<div id="problem-2" class="section level1">
-<h1>Problem 2</h1>
-<p>Put numbers into variables, do simple math on the variables</p>
-<pre class="r"><code>a&lt;-1
-b&lt;-2
-a+b</code></pre>
-<pre><code>## [1] 3</code></pre>
-<pre class="r"><code>d&lt;-c(1,2,3)
-e&lt;-c(5,6,7)
-d+e</code></pre>
-<pre><code>## [1]  6  8 10</code></pre>
-<pre class="r"><code>d*e</code></pre>
-<pre><code>## [1]  5 12 21</code></pre>
-<pre class="r"><code>d/e</code></pre>
-<pre><code>## [1] 0.2000000 0.3333333 0.4285714</code></pre>
-</div>
-<div id="problem-3" class="section level1">
-<h1>Problem 3</h1>
-<p>Write code that will place the numbers 1 to 100 separately into a
-variable using for loop. Then, again using the seq function.</p>
-<pre class="r"><code># for loop solution
-# i becomes the number 1 to 100 at each step of the loop
+<div id="final-data-cleaning" class="section level1">
+<h1>8. Final Data Cleaning</h1>
+<hr>
+<p>Let’s go back to <code>cyclistic_2022_cleaned</code> (step 6 above),
+and include all of the findings from step 7:</p>
+<pre class="r"><code>cyclistic_2022_cleaned &lt;- cyclistic_2022_cleaned %&gt;% filter(toupper(start_station_name) != start_station_name) %&gt;% filter(toupper(end_station_name) != end_station_name) %&gt;% 
+        filter(!str_detect(start_station_name, &quot;test|Test|TEST&quot;) &amp; 
+                   !str_detect(end_station_name, &quot;test|Test|TEST&quot;) &amp; 
+                   !str_detect(start_station_id, &quot;test|Test|TEST&quot;) &amp; 
+                   !str_detect(end_station_id, &quot;test|Test|TEST&quot;))</code></pre>
+<p><br> To ensure there’s no duplicate id, let’s check with
+<code>duplicated()</code>:</p>
+<pre class="r"><code>cyclistic_2022_cleaned[!duplicated(cyclistic_2022_cleaned$ride_id), ]</code></pre>
+<p><br> Apparently, there are exact same number of rows as before. All
+good, no need to save this.</p>
+<p>Next, let’s detect if there are trailing/leading spaces and other
+unnecessary symbols.</p>
+<p>After checking the <code>start_station_name</code> and
+<code>end_station_name</code> manually, I found out that there is a
+certain symbol used after the end of the station name, which is
+<b>*</b>.</p>
+<p>I also found out that certain stations ended up with <b>(Temp)</b>
+and <b>- Charging</b>. To avoid duplicate station names during analysis
+stage later on, these stations should be cleaned as well.</p>
+<p>We clean the data by using gsub():</p>
+<pre class="r"><code>cyclistic_2022_cleaned$start_station_name &lt;- gsub(&quot;\\*&quot;, &quot;&quot;, cyclistic_2022_cleaned$start_station_name)
 
+cyclistic_2022_cleaned$start_station_name &lt;- gsub(&quot;\\(Temp)&quot;, &quot;&quot;, cyclistic_2022_cleaned$start_station_name)
 
-a &lt;- length(100) # make empty variable, set length to 100
-for (i in 1:100){
-  a[i] &lt;-i #assigns the number in i, to the ith index of a
-}
+cyclistic_2022_cleaned$start_station_name &lt;- gsub(&quot;\\ - Charging&quot;, &quot;&quot;, cyclistic_2022_cleaned$start_station_name)</code></pre>
+<p><br> Let’s do the same for <code>end_station_name</code>:</p>
+<pre class="r"><code>cyclistic_2022_cleaned$end_station_name &lt;- gsub(&quot;\\*&quot;, &quot;&quot;, cyclistic_2022_cleaned$end_station_name)
+    
+cyclistic_2022_cleaned$end_station_name &lt;- gsub(&quot;\\(Temp)&quot;, &quot;&quot;, cyclistic_2022_cleaned$end_station_name)
+    
+cyclistic_2022_cleaned$end_station_name &lt;- gsub(&quot;\\ - Charging&quot;, &quot;&quot;, cyclistic_2022_cleaned$end_station_name)</code></pre>
+<p><br> And then, for the rest of data cleaning:</p>
+<pre class="r"><code>cyclistic_2022_cleaned$start_station_name &lt;- gsub(&quot;^\\s+|\\s+$&quot;, &quot;&quot;, cyclistic_2022_cleaned$start_station_name)
 
-print(a)</code></pre>
-<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
-##  [19]  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36
-##  [37]  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
-##  [55]  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72
-##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
-##  [91]  91  92  93  94  95  96  97  98  99 100</code></pre>
-<pre class="r"><code># for loop solution #2
+cyclistic_2022_cleaned$end_station_name &lt;- gsub(&quot;^\\s+|\\s+$&quot;, &quot;&quot;, cyclistic_2022_cleaned$end_station_name)
 
-a&lt;-c() #create empty variable using combine command
-for (i in 1:100){
-  a&lt;-c(a,i) # keeps combining a with itself and the new number in i
-}
-print(a)</code></pre>
-<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
-##  [19]  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36
-##  [37]  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
-##  [55]  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72
-##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
-##  [91]  91  92  93  94  95  96  97  98  99 100</code></pre>
-<pre class="r"><code># seq solution
-a &lt;- seq(1,100,1) # look up help for seq using ?seq() in console
-print(a)</code></pre>
-<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
-##  [19]  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36
-##  [37]  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
-##  [55]  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72
-##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
-##  [91]  91  92  93  94  95  96  97  98  99 100</code></pre>
+cyclistic_2022_cleaned$member_casual &lt;- gsub(&quot;^\\s+|\\s+$&quot;, &quot;&quot;, cyclistic_2022_cleaned$member_casual)
+
+cyclistic_2022_cleaned$rideable_type &lt;- gsub(&quot;^\\s+|\\s+$&quot;, &quot;&quot;, cyclistic_2022_cleaned$rideable_type)
+
+cyclistic_2022_cleaned$start_station_id &lt;- gsub(&quot;^\\s+|\\s+$&quot;, &quot;&quot;, cyclistic_2022_cleaned$start_station_id)
+
+cyclistic_2022_cleaned$end_station_id &lt;- gsub(&quot;^\\s+|\\s+$&quot;, &quot;&quot;, cyclistic_2022_cleaned$end_station_id)</code></pre>
+<p><br> Above steps ensures no trailing/leading whitespaces and
+unnecessary symbols in the naming processes.<br><br></p>
 </div>
-<div id="replace-this-with-problem-4" class="section level1">
-<h1>Replace this with problem 4</h1>
-<p>And keep going. Try to solve the problems with different scripts that
-provide the same solution. Good luck, Happy coding.</p>
+<div id="analyze-most-popular-station-count" class="section level1">
+<h1>9. Analyze Most Popular Station Count</h1>
+<hr>
+<div id="a.-most-popular-stations-for-members" class="section level3">
+<h3>9a. Most Popular Stations for Members</h3>
+<p>Let’s study which <code>start_station_name</code> has the highest
+count. Let’s analyze both <code>start_station_name</code> and
+<code>end_station_name</code>. Also, it’s important to separate them
+based on membership types (casual vs. member). Let’s begin with
+<code>start_station_name</code>:</p>
+<pre class="r"><code>start_station_name_count_member &lt;- cyclistic_2022_cleaned %&gt;% filter(member_casual == &#39;member&#39;) %&gt;% group_by(start_station_name) %&gt;% count(start_station_name)</code></pre>
+<p><br> Now, let’s do the same for <code>end_station_name</code>:</p>
+<pre class="r"><code>end_station_name_count_member &lt;- cyclistic_2022_cleaned %&gt;% filter(member_casual == &#39;member&#39;) %&gt;% group_by(end_station_name) %&gt;% count(end_station_name)</code></pre>
+<p><br> Apparently, some of the same stations still conquer the top
+results.</p>
+<p>Now let’s use <code>full_join</code> to combine them:</p>
+<pre class="r"><code>station_name_count_member &lt;- full_join(start_station_name_count_member, end_station_name_count_member, by = c(&quot;start_station_name&quot;=&quot;end_station_name&quot;))</code></pre>
+<p><br> and then, use <code>if-else</code> statement to get the total
+counts:</p>
+<pre class="r"><code>station_name_count_member &lt;- station_name_count_member %&gt;% mutate(n_total = if(!any(is.na(c(n.x, n.y)))) { n.x + n.y } else if(is.na(n.y)) { n.x } else { n.y })</code></pre>
+<p><br> The above line will create a result where it shows the total
+count from both <code>start_station_name</code> and
+<code>end_station_name</code>.</p>
+<p>Next, re-organize the data a little bit so they look better:</p>
+<pre class="r"><code>station_name_count_member &lt;- rename(station_name_count_member, station_name = start_station_name)
+
+station_name_count_member &lt;- station_name_count_member %&gt;% select(-n.x, -n.y) %&gt;% arrange(desc(n_total))</code></pre>
+<p><br> Now the column name looks better, and unnecessary columns have
+been cleaned as well.<br><br></p>
+</div>
+<div id="b.-most-popular-stations-for-casuals" class="section level3">
+<h3>9b. Most Popular Stations for Casuals</h3>
+<p>let’s start with <code>end_station_name</code>:</p>
+<pre class="r"><code>start_station_name_count_casual &lt;- cyclistic_2022_cleaned %&gt;% filter(member_casual == &#39;casual&#39;) %&gt;% group_by(start_station_name) %&gt;% count(start_station_name)</code></pre>
+<p><br> Next, do the same for <code>end_station_name</code>:</p>
+<pre class="r"><code>end_station_name_count_casual &lt;- cyclistic_2022_cleaned %&gt;% filter(member_casual == &#39;casual&#39;) %&gt;% group_by(end_station_name) %&gt;% count(end_station_name)</code></pre>
+<p><br> And just like before, use <code>full_join</code>:</p>
+<pre class="r"><code>station_name_count_casual &lt;- full_join(start_station_name_count_casual, end_station_name_count_casual, by = c(&quot;start_station_name&quot;=&quot;end_station_name&quot;))</code></pre>
+<p><br> Now let’s use <code>if-else</code> statement:</p>
+<pre class="r"><code>station_name_count_casual &lt;- station_name_count_casual %&gt;% mutate(n_total = if(!any(is.na(c(n.x, n.y)))) { n.x + n.y } else if(is.na(n.y)) { n.x } else { n.y })</code></pre>
+<p><br> Next, re-organize the data a little bit:</p>
+<pre class="r"><code>station_name_count_casual &lt;- rename(station_name_count_casual, station_name = start_station_name)
+
+station_name_count_casual &lt;- station_name_count_casual %&gt;% select(-n.x, -n.y) %&gt;% arrange(desc(n_total))</code></pre>
+<p><br><br></p>
+</div>
+</div>
+<div id="analyze-popular-days-of-week-and-dates" class="section level1">
+<h1>10. Analyze Popular Days of Week and Dates</h1>
+<hr>
+<p>Let’s see which day is the most popular:</p>
+<pre class="r"><code>cyclistic_2022_cleaned %&gt;% group_by(day_of_week) %&gt;% count(day_of_week) %&gt;% arrange(desc(n))</code></pre>
+<p><br> After running above code, I found out that Saturday (day 7) is
+the most popular, while Monday (day 2) is the least popular. Next,
+separate them by member and casual:</p>
+<pre class="r"><code>day_of_week_count &lt;- cyclistic_2022_cleaned %&gt;% group_by(day_of_week, member_casual) %&gt;% count(day_of_week) %&gt;% arrange(desc(n))</code></pre>
+<p><br> For now let’s save this result as
+<code>day_of_week_count</code>. With the member filter, I found out that
+several of the most popular trips were on Wednesday and Thursday (day 4
+and 5). Whereas for casuals, Saturday and Sunday (day 7 and day 1) were
+more popular.</p>
+<p>Next, let’s analyze the popular dates and group them by either week
+or month. First, let’s get the week and month to check them better:</p>
+<pre class="r"><code>    clean_week_and_month &lt;- cyclistic_2022_cleaned %&gt;% mutate(week = week(started_at), month = month(started_at)) </code></pre>
+<p><br> After some considerations, I believe analyzing the data by month
+makes more sense and much simpler than by week, because we will try to
+see if the trends change following the seasons in the city of Chicago.
+In this case, let’s differentiate the most popular dates between members
+and casuals to see their differences:</p>
+<pre class="r"><code>popular_dates_member_count &lt;- clean_week_and_month %&gt;% filter(member_casual == &#39;member&#39;) %&gt;% group_by(month, day_of_week) %&gt;% count(month) %&gt;% arrange(desc(n))</code></pre>
+<p><br> and</p>
+<pre class="r"><code>    popular_dates_casual_count &lt;- clean_week_and_month %&gt;% filter(member_casual == &#39;casual&#39;) %&gt;% group_by(month, day_of_week) %&gt;% count(month) %&gt;% arrange(desc(n))</code></pre>
+<p><br> From a quick glance, the trends look different between them.
+<br><br></p>
+</div>
+<div id="analyze-most-popular-hours-of-the-day" class="section level1">
+<h1>11. Analyze Most Popular Hours of the Day</h1>
+<hr>
+<p>After analyzing popular days of week and dates, time to do similar
+analysis, but for the hours.</p>
+<p>Let’s start with total count for all (both casual and member):</p>
+<pre class="r"><code>clean_hour &lt;- cyclistic_2022_cleaned
+
+clean_hour$started_at &lt;- format(clean_hour$started_at, &quot;%H&quot;)
+
+clean_hour %&gt;% group_by(started_at) %&gt;% count(started_at) %&gt;% arrange(desc(n))</code></pre>
+<p><br> From above codes, looks like 3PM to 6PM are more popular. Next,
+let’s divide them by the casual or member groups.</p>
+<pre class="r"><code>popular_hours_member_count &lt;- clean_hour %&gt;% filter(member_casual == &#39;member&#39;) %&gt;% group_by(started_at, member_casual) %&gt;% count(started_at) %&gt;% arrange(desc(n))</code></pre>
+<p><br> and</p>
+<pre class="r"><code>popular_hours_casual_count &lt;- clean_hour %&gt;% filter(member_casual == &#39;casual&#39;) %&gt;% group_by(started_at, member_casual) %&gt;% count(started_at) %&gt;% arrange(desc(n))</code></pre>
+<p><br> It looks like members are more likely to use the bikes for work
+commute and weekday routines. On the other hand, casuals don’t use the
+bikes as much during the commute hours in the morning, but they still
+use the bikes often during commute hours in the evening. Casuals also
+have more tendency to use the bikes around 8-10 PM as compared to
+members.<br><br></p>
+</div>
+<div id="analyze-ride_length-difference-between-casual-and-member"
+class="section level1">
+<h1>12. Analyze ride_length Difference Between Casual and Member</h1>
+<hr>
+<p>Earlier, I calculated the <code>ride_length</code> by calculating the
+difference between <code>started_at</code> and
+<code>ended_at</code>.</p>
+<p>To calculate <code>average ride_length</code> in minutes, let’s just
+convert <code>ride_length</code> to minutes:</p>
+<pre class="r"><code>ride_length_avg &lt;- cyclistic_2022_cleaned %&gt;% mutate(ride_length_in_minutes = as.numeric(ride_length / 60)) %&gt;% group_by(member_casual) %&gt;% summarize(avg_ride_length_in_minutes = mean(ride_length_in_minutes))</code></pre>
+<p><br> Above code provides <code>average ride_length</code> in minutes,
+and compare them between members and casuals.<br><br></p>
+</div>
+<div id="analyze-bike-types" class="section level1">
+<h1>13. Analyze Bike Types</h1>
+<hr>
+<p>Let’s start with this:</p>
+<pre class="r"><code>rideable_type_count &lt;- cyclistic_2022_cleaned %&gt;% group_by(rideable_type, member_casual) %&gt;% count(rideable_type) %&gt;% arrange(desc(n))</code></pre>
+<p><br> Next, check how many total trips they have between members
+vs. casuals:</p>
+<pre class="r"><code>member_vs_casual_count &lt;- cyclistic_2022_cleaned %&gt;% group_by(member_casual) %&gt;% count(member_casual) %&gt;% arrange(desc(n))</code></pre>
+<p><br> From above code, looks like members make much more trips as
+compared to casuals. For further analysis, use <code>inner join</code>
+and <code>mutate</code> to see the percentages from each group:</p>
+<pre class="r"><code>rideable_type_count_and_percentage &lt;- inner_join(rideable_type_count, member_vs_casual_count, by = c(&quot;member_casual&quot;=&quot;member_casual&quot;)) %&gt;% mutate(trips_percentage = n.x / n.y)</code></pre>
+<p><br> The above code will allow us to see the percentage of members
+that use classic bikes vs. electric bikes, and percentage of casuals
+that use classic bikes vs. electric bikes. vs docked bikes.</p>
+<p>After I checked <code>rideable_type_count_and_percentage</code>, I
+realized it’s better to separate the <code>member_casual</code>
+group:</p>
+<pre class="r"><code>rideable_type_casual &lt;- rideable_type_count_and_percentage %&gt;% filter(member_casual == &#39;casual&#39;) %&gt;% select(-n.x, -n.y)</code></pre>
+<p><br> and</p>
+<pre class="r"><code>rideable_type_member &lt;- rideable_type_count_and_percentage %&gt;% filter(member_casual == &#39;member&#39;) %&gt;% select(-n.x, -n.y)</code></pre>
+<p><br><br></p>
+</div>
+<div id="pre-visualization---find-latitude-and-longitude"
+class="section level1">
+<h1>14. Pre-Visualization - Find Latitude and Longitude:</h1>
+<hr>
+<p>Before data visualization, it’s important to get latitude and
+longitude for the station names. I will visualize the station name
+counts with <code>leaflet</code>, so it’s important to get an external
+dataset for this.</p>
+<p>Get the .csv file from here:
+<a href="https://data.cityofchicago.org/Transportation/Divvy-Bicycle-Stations/bbyy-e7gq/data#revert" target=_blank>https://data.cityofchicago.org</a></p>
+<p>Change the column name from <b>Station Name</b> to
+<b>Station_Name</b> so it will be easier to analyze and clean.</p>
+<p>Then, go back to RStudio:</p>
+<pre class="r"><code>divvy_bicycle_stations &lt;- read_csv(&quot;Divvy_Bicycle_Stations.csv&quot;)</code></pre>
+<p><br> Next, need to clean <code>divvy_bicycle_stations</code> because
+some station names have <b>*</b>, <b>(Temp)</b>, and <b>- Charging</b>,
+just like before. Since I have combined duplicate station names in the
+analysis stage before, I need to make sure to have the same consistent
+naming process here. Because the idea here is to get the latitude and
+longitude with <code>join()</code> function.</p>
+<p>The cleaning process:</p>
+<pre class="r"><code>divvy_bicycle_stations$Station_Name &lt;- gsub(&quot;\\*&quot;, &quot;&quot;, divvy_bicycle_stations$Station_Name)
+
+divvy_bicycle_stations$Station_Name &lt;- gsub(&quot;\\(Temp)&quot;, &quot;&quot;, divvy_bicycle_stations$Station_Name)
+
+divvy_bicycle_stations$Station_Name &lt;- gsub(&quot;\\ - Charging&quot;, &quot;&quot;, divvy_bicycle_stations$Station_Name)
+
+divvy_bicycle_stations$Station_Name &lt;- gsub(&quot;^\\s+|\\s+$&quot;, &quot;&quot;, divvy_bicycle_stations$Station_Name)</code></pre>
+<p><br> Then use <code>left_join</code> to include the latitude and
+longitude numbers:</p>
+<pre class="r"><code>station_name_count_member_with_location &lt;- left_join(station_name_count_member, divvy_bicycle_stations, by = c(&quot;station_name&quot;=&quot;Station_Name&quot;))</code></pre>
+<p><br> It looks like some stations still do not have latitude and
+longitude values. It turns out that the dataset from
+<i>cityofchicago</i> is not complete enough. Let’s export
+<code>station_name_count_member_with_location</code> to .csv and let’s
+handle the rest of latitude and longitude manually with Excel.</p>
+<p>I manually included latitude and longitude by going to google maps
+and even just manually searching for them in the cityofchicago website.
+I filled in all the latitude and longitude numbers manually in Excel,
+after I used <b>Conditional Formatting</b> to highlight <b>NA</b>
+values.</p>
+<p>Next, let’s save the updated .csv file to the Rstudio folder, and
+let’s import it back:</p>
+<pre class="r"><code>station_name_count_member_with_location &lt;- read_csv(&quot;updated_station_name_count_member_with_location.csv&quot;)</code></pre>
+<p><br> Now everything looks much better.</p>
+<p>And since I have manually updated the .csv earlier using Excel, I can
+just overwrite <code>divvy_bicycle_stations</code> with the updated
+longitude and latitude, and then use <code>left_join</code> for
+<code>station_name_count_casual</code>:</p>
+<pre class="r"><code>divvy_bicycle_stations &lt;- station_name_count_member_with_location %&gt;% select(-n_total)
+
+station_name_count_casual_with_location &lt;- left_join(station_name_count_casual, divvy_bicycle_stations, by = c(&quot;station_name&quot;=&quot;station_name&quot;))</code></pre>
+<p><br> These two files with latitude and longitude, I will visualize
+them with leaflet.<br><br></p>
+</div>
+<div id="data-visualization" class="section level1">
+<h1>15. Data Visualization</h1>
+<hr>
+<div id="leaflet-for-station_name_count_casual" class="section level3">
+<h3>1. Leaflet for station_name_count_casual:</h3>
+<pre class="r"><code>mypalette2 &lt;- colorBin(
+    palette =&quot;plasma&quot;,
+    domain = station_name_count_casual_with_location$n_total,
+    na.color = &quot;transparent&quot;, 
+    bins = 6
+)</code></pre>
+<p><br> then</p>
+<pre class="r"><code>mytext2 &lt;- paste(
+    &quot;&lt;b&gt;Station:&lt;/b&gt;&quot;, station_name_count_casual_with_location$station_name, &quot;&lt;br /&gt;&quot;,
+    &quot;&lt;b&gt;Counts:&lt;/b&gt;&quot;, station_name_count_casual_with_location$n_total) %&gt;%
+    lapply(htmltools::HTML)</code></pre>
+<p><br> then</p>
+<pre class="r"><code>leaflet_for_station_name_count_casual &lt;- leaflet(station_name_count_casual_with_location) %&gt;%
+    addTiles() %&gt;%
+    setView(
+        lng = -87.6298, lat = 41.8781, zoom = 12
+    ) %&gt;%
+    
+    addCircleMarkers(
+        ~ Longitude, ~ Latitude, 
+        fillColor = ~ mypalette2(n_total), 
+        fillOpacity = 0.7, 
+        color = &quot;white&quot;, 
+        radius = 7, 
+        stroke = FALSE,
+        label = mytext2,
+        labelOptions = labelOptions(
+            style = list( 
+                &quot;font-weight&quot; = &quot;normal&quot;, 
+                padding = &quot;3px 8px&quot;
+            ), 
+            textsize = &quot;13px&quot;, 
+            direction = &quot;auto&quot;
+        ) 
+    ) %&gt;%
+    
+    addLegend( 
+        pal = mypalette2, 
+        values = ~ n_total, 
+        opacity = 0.9,
+        title = &quot;Station Name Counts&quot;, 
+        position = &quot;bottomright&quot;
+    )</code></pre>
+<p><br><br></p>
+</div>
+<div id="leaflet-for-station_name_count_member" class="section level3">
+<h3>2. Leaflet for station_name_count_member:</h3>
+<pre class="r"><code>mypalette &lt;- colorBin(
+    palette =&quot;plasma&quot;,
+    domain = station_name_count_member_with_location$n_total,
+    na.color = &quot;transparent&quot;, 
+    bins = 6
+)</code></pre>
+<p><br> then</p>
+<pre class="r"><code>mytext &lt;- paste(
+    &quot;&lt;b&gt;Station:&lt;/b&gt;&quot;, station_name_count_member_with_location$station_name, &quot;&lt;br /&gt;&quot;,
+    &quot;&lt;b&gt;Counts:&lt;/b&gt;&quot;, station_name_count_member_with_location$n_total) %&gt;%
+    lapply(htmltools::HTML)</code></pre>
+<p><br> then</p>
+<pre class="r"><code>leaflet_for_station_name_count_member &lt;- leaflet(station_name_count_member_with_location) %&gt;%
+    addTiles() %&gt;%
+    setView(
+        lng = -87.6298, lat = 41.8781, zoom = 12
+    ) %&gt;%
+    
+    addCircleMarkers(
+        ~ Longitude, ~ Latitude, 
+        fillColor = ~ mypalette(n_total), 
+        fillOpacity = 0.7, 
+        color = &quot;white&quot;, 
+        radius = 7, 
+        stroke = FALSE,
+        label = mytext,
+        labelOptions = labelOptions(
+            style = list( 
+                &quot;font-weight&quot; = &quot;normal&quot;, 
+                padding = &quot;3px 8px&quot;
+            ), 
+            textsize = &quot;13px&quot;, 
+            direction = &quot;auto&quot;
+        ) 
+    ) %&gt;%
+    
+    addLegend( 
+        pal = mypalette, 
+        values = ~ n_total, 
+        opacity = 0.9,
+        title = &quot;Station Name Counts&quot;, 
+        position = &quot;bottomright&quot;
+    )</code></pre>
+<p><br><br></p>
+</div>
+<div id="ggplot-for-popular-dates" class="section level3">
+<h3>3. GGPlot for Popular Dates:</h3>
+<pre class="r"><code>ggplot_popular_dates_casual_count &lt;- ggplot(
+    popular_dates_casual_count, 
+    aes(
+        x = month,
+        y = day_of_week,
+        fill = n
+    )
+) + 
+    
+    geom_tile (
+        color = &quot;white&quot;,
+        na.rm = FALSE
+    ) +
+    
+    scale_fill_viridis_b(
+        option = &quot;plasma&quot;,
+        direction = 1,
+        name = &quot;Trip Counts&quot;
+    ) +
+    
+    scale_x_continuous(
+        breaks = seq(length = 12),
+        labels = c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, 
+                   &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;)
+    ) +
+    
+    scale_y_continuous(
+        breaks = seq(length = 7),
+        labels = c(&quot;Sun&quot;, &quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;)
+    ) +
+    
+    ylab(&quot;&quot;) + xlab(&quot;&quot;) + labs(title = &quot;Casual&quot;) +
+    
+    theme(legend.text = element_text(size = 20),
+          legend.title = element_text(size = 22),
+          axis.text.x = element_text(size = 20),
+          axis.text.y = element_text(size = 20),
+          plot.title = element_text(size = 25, color = &quot;#1b9e77&quot;)
+    )</code></pre>
+<p><br> then</p>
+<pre class="r"><code>ggplot_popular_dates_member_count &lt;- ggplot(
+    popular_dates_member_count, 
+    aes(
+        x = month,
+        y = day_of_week,
+        fill = n
+    )
+) + 
+    
+    geom_tile (
+        color = &quot;white&quot;,
+        na.rm = FALSE
+    ) +
+    
+    scale_fill_viridis_b(
+        option = &quot;plasma&quot;,
+        direction = 1,
+        name = &quot;Trip Counts&quot;
+    ) +
+    
+    scale_x_continuous(
+        breaks = seq(length = 12),
+        labels = c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, 
+                   &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;)
+    ) +
+    
+    scale_y_continuous(
+        breaks = seq(length = 7),
+        labels = c(&quot;Sun&quot;, &quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;)
+    ) +
+    
+    ylab(&quot;&quot;) + xlab(&quot;&quot;) + labs(title = &quot;Member&quot;) +
+    
+    theme(legend.text = element_text(size = 20),
+          legend.title = element_text(size = 22),
+          axis.text.x = element_text(size = 20),
+          axis.text.y = element_text(size = 20),
+          plot.title = element_text(size = 25, color = &quot;#d95f02&quot;)
+    )</code></pre>
+<p><br> Next, combine them using <code>ggarrange()</code>:</p>
+<pre class="r"><code>ggarrange_popular_dates_comparison &lt;- ggarrange(
+    ggplot_popular_dates_casual_count, 
+    ggplot_popular_dates_member_count, 
+    ncol = 1, 
+    nrow = 2,
+    common.legend = TRUE, 
+    legend = &quot;right&quot;
+)</code></pre>
+<p><br><br></p>
+</div>
+<div id="ggplot-for-days-of-week" class="section level3">
+<h3>4. GGPlot for Days of Week:</h3>
+<pre class="r"><code>ggplot_day_of_week_count &lt;- ggplot(day_of_week_count, 
+       aes(y=n, x=day_of_week, fill=member_casual)) + 
+    
+    geom_bar(position=&quot;dodge&quot;, stat=&quot;identity&quot;) +
+    
+    scale_x_continuous(
+        breaks = seq(length = 7),
+        labels = c(&quot;Sun&quot;, &quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;)
+    ) +
+    
+    scale_y_continuous(
+        labels = scales::comma
+    ) +
+    
+    scale_fill_brewer(palette = &quot;Dark2&quot;, name = &quot;&quot;) +
+    
+    ylab(&quot;&quot;) + xlab(&quot;&quot;) + 
+    
+    theme(legend.text = element_text(size = 20),
+    legend.position = &quot;bottom&quot;,
+    axis.text.x = element_text(size = 20),
+    axis.text.y = element_text(size = 20)
+    )</code></pre>
+<p><br><br></p>
+</div>
+<div id="ggplot-for-popular-hours" class="section level3">
+<h3>5. GGPlot for Popular Hours:</h3>
+<pre class="r"><code>ggplot_popular_hours_casual_count &lt;- ggplot(popular_hours_casual_count, 
+       aes(y=n, x=started_at)) + 
+    
+    geom_bar(position=&quot;dodge&quot;, stat=&quot;identity&quot;, fill=&quot;#1b9e77&quot;) +
+    
+    coord_polar(start = 0) +
+    
+    theme_minimal() +
+    
+    labs(title=&quot;Casual&quot;) +
+    
+    theme(axis.text.y = element_blank(),
+          axis.title = element_blank(),
+          axis.text.x = element_text(size = 18),
+          plot.title = element_text(size = 25, color = &quot;#1b9e77&quot;, hjust = 0.5),
+          panel.grid.major = element_line(size = 0.5, color = &quot;grey&quot;),
+          panel.grid.minor = element_line(size = 0.25, color = &quot;grey&quot;)
+    )</code></pre>
+<p><br> then</p>
+<pre class="r"><code>ggplot_popular_hours_member_count &lt;- ggplot(popular_hours_member_count, 
+                                            aes(y=n, x=started_at)) + 
+    
+    geom_bar(position=&quot;dodge&quot;, stat=&quot;identity&quot;, fill=&quot;#d95f02&quot;) +
+    
+    coord_polar(start = 0) +
+    
+    theme_minimal() +
+    
+    labs(title=&quot;Member&quot;) +
+    
+    theme(axis.text.y = element_blank(),
+          axis.title = element_blank(),
+          axis.text.x = element_text(size = 18),
+          plot.title = element_text(size = 25, color = &quot;#d95f02&quot;, hjust = 0.5),
+          panel.grid.major = element_line(size = 0.5, color = &quot;grey&quot;),
+          panel.grid.minor = element_line(size = 0.25, color = &quot;grey&quot;)
+    )</code></pre>
+<p><br> and then, combine them using <code>ggarrange()</code>:</p>
+<pre class="r"><code>ggarrange_popular_hours_comparison &lt;- ggarrange(
+    ggplot_popular_hours_casual_count, 
+    ggplot_popular_hours_member_count, 
+    nrow = 1,
+    common.legend = TRUE)</code></pre>
+<p><br><br></p>
+</div>
+<div id="ggplot-for-avg.-ride-length" class="section level3">
+<h3>6. GGplot for Avg. Ride Length:</h3>
+<pre class="r"><code>ggplot_ride_length_avg &lt;- ggplot(ride_length_avg, 
+       aes(y=member_casual, x=avg_ride_length_in_minutes, fill=member_casual)) + 
+    
+    geom_bar(position=&quot;dodge&quot;, stat=&quot;identity&quot;) +
+    
+    scale_fill_brewer(palette = &quot;Dark2&quot;, name = &quot;&quot;) +
+    
+    ylab(&quot;&quot;) + xlab(&quot;&quot;) + labs(title=&quot;Average Ride Length (Minutes)&quot;) +
+    
+    theme(legend.text = element_text(size = 40),
+          legend.position = &quot;bottom&quot;,
+          axis.text.x = element_text(size = 40),
+          axis.text.y = element_text(size = 40),
+          plot.title = element_text(size = 50)
+    )</code></pre>
+<p><br><br></p>
+</div>
+<div id="plotly-for-the-pie-charts" class="section level3">
+<h3>7. Plotly for the Pie Charts:</h3>
+<pre class="r"><code>plotly_rideable_type_casual &lt;- plot_ly(rideable_type_casual, labels = ~rideable_type, values = ~trips_percentage, type = &#39;pie&#39;,
+        textposition = &#39;inside&#39;,
+        textinfo = &#39;label+percent&#39;,
+        insidetextfont = list(color = &#39;#FFFFFF&#39;, size = 20),
+        hoverinfo = &#39;text&#39;,
+        text = ~rideable_type,
+        marker = list(colors = colors,
+                      line = list(color = &#39;#FFFFFF&#39;, width = 1)),
+        showlegend = FALSE) %&gt;% 
+    layout(annotations = list(x = 0.3, y = 1.05, text = &quot;Casual&quot;, showarrow = F, xref=&#39;paper&#39;, yref=&#39;paper&#39;, xanchor=&#39;right&#39;, yanchor=&#39;auto&#39;, xshift=0, yshift=0, font=list(size=25, color = &#39;#1b9e77&#39;)))</code></pre>
+<p><br> and:</p>
+<pre class="r"><code>plotly_rideable_type_member &lt;- plot_ly(rideable_type_member, labels = ~rideable_type, values = ~trips_percentage, type = &#39;pie&#39;,
+       textposition = &#39;inside&#39;,
+       textinfo = &#39;label+percent&#39;,
+        insidetextfont = list(color = &#39;#FFFFFF&#39;, size = 20),
+       hoverinfo = &#39;text&#39;,
+       text = ~rideable_type,
+       marker = list(colors = colors,
+                     line = list(color = &#39;#FFFFFF&#39;, width = 1)),
+       showlegend = FALSE) %&gt;% 
+    layout(annotations = list(x = 0.3, y = 1.05, text = &quot;Member&quot;, showarrow = F, xref=&#39;paper&#39;, yref=&#39;paper&#39;, xanchor=&#39;right&#39;, yanchor=&#39;auto&#39;, xshift=0, yshift=0, font=list(size=25, color = &#39;#d95f02&#39;)))</code></pre>
+<p>I don’t use <code>subplot()</code> to merge above plotly charts, I
+just combine the exported images manually.</p>
+</div>
 </div>
 
 

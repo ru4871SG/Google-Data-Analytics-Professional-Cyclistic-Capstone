@@ -25,7 +25,7 @@ Here you can find the alternative steps in SQL, however, I won't write much deta
 
 *Note: My project folder in BigQuery is called `coursera-test-367602`. That's why you keep seeing this project folder in the below steps.
 
-<br><br><br>
+<br><br>
 
 # 1. Import Datasets to BigQuery
 <hr>

@@ -397,7 +397,7 @@ str(cyclistic_202210)
 str(cyclistic_202211)
 str(cyclistic_202212)</code></pre>
 <p><br> Looks like all of them are consistent. both
-<code>started_at</code> and <code>ended-at</code> are already in
+<code>started_at</code> and <code>ended_at</code> are already in
 <i>POSIXct</i>. No need to change any data type.
 <code>start_station_id</code> and <code>end_station_id</code> are also
 in <i>chr</i> already.<br><br></p>
@@ -405,7 +405,7 @@ in <i>chr</i> already.<br><br></p>
 <div id="merge-all-of-them" class="section level1">
 <h1>3. Merge All of Them</h1>
 <hr>
-<p>Merge all of them:</p>
+<p>Merge all of them using <code>bind_rows()</code>:</p>
 <pre class="r"><code>cyclistic_2022 &lt;- bind_rows(
      cyclistic_202201, cyclistic_202202, cyclistic_202203, cyclistic_202204,
      cyclistic_202205, cyclistic_202206, cyclistic_202207, cyclistic_202208,
@@ -429,11 +429,11 @@ ensure the first row is the oldest:</p>
 <pre class="r"><code>cyclistic_2022 &lt;- cyclistic_2022 %&gt;% mutate(ride_length = ended_at - started_at)</code></pre>
 <p><br> and</p>
 <pre class="r"><code>cyclistic_2022$day_of_week &lt;- wday(cyclistic_2022$started_at)</code></pre>
-<p>Both day_of_week and ride_length will be used for further
-analyses.<br><br></p>
+<p>Both <code>day_of_week</code> and <code>ride_length</code> will be
+used for further analyses.<br><br></p>
 </div>
-<div id="premature-data-cleaning" class="section level1">
-<h1>6. Premature Data Cleaning</h1>
+<div id="first-process-of-data-cleaning" class="section level1">
+<h1>6. First Process of Data Cleaning</h1>
 <hr>
 <p>According to Divvy’s data policy, anything below 60 seconds should
 not be included.</p>
@@ -607,7 +607,7 @@ and casuals to see their differences:</p>
 <hr>
 <p>After analyzing popular days of week and dates, time to do similar
 analysis, but for the hours.</p>
-<p>Let’s start with total count for all (both casual and member):</p>
+<p>Let’s start with total count for all (both casuals and members):</p>
 <pre class="r"><code>clean_hour &lt;- cyclistic_2022_cleaned
 
 clean_hour$started_at &lt;- format(clean_hour$started_at, &quot;%H&quot;)
@@ -622,9 +622,9 @@ commute and weekday routines. On the other hand, casuals don’t use the
 bikes as much during the commute hours in the morning, but they still
 use the bikes often during commute hours in the evening.<br><br></p>
 </div>
-<div id="analyze-ride-length-difference-between-casual-and-member"
+<div id="analyze-ride-length-difference-between-casuals-and-members"
 class="section level1">
-<h1>12. Analyze Ride Length Difference Between Casual and Member</h1>
+<h1>12. Analyze Ride Length Difference Between Casuals and Members</h1>
 <hr>
 <p>Earlier, I calculated the <code>ride_length</code> by calculating the
 difference between <code>started_at</code> and
@@ -694,10 +694,10 @@ longitude values. It turns out that the dataset from
 <i>cityofchicago</i> is not complete enough. Let’s export
 <code>station_name_count_member_with_location</code> to .csv and let’s
 handle the rest of latitude and longitude manually with Excel.</p>
-<p>I manually included latitude and longitude by going to Google Maps
-and by searching for them in the <i>cityofchicago</i> website. I filled
-in all the latitude and longitude numbers manually in Excel, after I
-used <b>Conditional Formatting</b> to highlight <b>NA</b> values.</p>
+<p>I manually include latitude and longitude by going to Google Maps and
+by searching for them in the <i>cityofchicago</i> website. I fill in all
+the latitude and longitude numbers manually in Excel, after I used
+<b>Conditional Formatting</b> to highlight <b>NA</b> values.</p>
 <p>Next, let’s save the updated .csv file to the Rstudio folder, and
 let’s import it back:</p>
 <pre class="r"><code>station_name_count_member_with_location &lt;- read_csv(&quot;updated_station_name_count_member_with_location.csv&quot;)</code></pre>

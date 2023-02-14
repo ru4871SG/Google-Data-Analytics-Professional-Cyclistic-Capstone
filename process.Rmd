@@ -61,11 +61,11 @@ str(cyclistic_202211)
 str(cyclistic_202212)
 ```
 <br>
-Looks like all of them are consistent. both `started_at` and `ended-at` are already in <i>POSIXct</i>. No need to change any data type. `start_station_id` and `end_station_id` are also in <i>chr</i> already.<br><br> 
+Looks like all of them are consistent. both `started_at` and `ended_at` are already in <i>POSIXct</i>. No need to change any data type. `start_station_id` and `end_station_id` are also in <i>chr</i> already.<br><br> 
 
 # 3. Merge All of Them
 <hr>
-Merge all of them:
+Merge all of them using `bind_rows()`:
 ```{r, eval=F, echo=T}
 cyclistic_2022 <- bind_rows(
      cyclistic_202201, cyclistic_202202, cyclistic_202203, cyclistic_202204,
@@ -94,9 +94,9 @@ and
 ```{r, eval=F, echo=T}
 cyclistic_2022$day_of_week <- wday(cyclistic_2022$started_at)
 ```
-Both day_of_week and ride_length will be used for further analyses.<br><br>
+Both `day_of_week` and `ride_length` will be used for further analyses.<br><br>
 
-# 6. Premature Data Cleaning
+# 6. First Process of Data Cleaning
 <hr>
 According to Divvy's data policy, anything below 60 seconds should not be included.
 
@@ -305,7 +305,7 @@ From a quick glance, the trends look different between them.
 <hr>
 After analyzing popular days of week and dates, time to do similar analysis, but for the hours.
 
-Let's start with total count for all (both casual and member):
+Let's start with total count for all (both casuals and members):
 ```{r, eval=F, echo=T}
 clean_hour <- cyclistic_2022_cleaned
 
@@ -326,7 +326,7 @@ popular_hours_casual_count <- clean_hour %>% filter(member_casual == 'casual') %
 <br>
 It looks like members are more likely to use the bikes for work commute and weekday routines. On the other hand, casuals don't use the bikes as much during the commute hours in the morning, but they still use the bikes often during commute hours in the evening.<br><br>
 
-# 12. Analyze Ride Length Difference Between Casual and Member
+# 12. Analyze Ride Length Difference Between Casuals and Members
 <hr>
 Earlier, I calculated the `ride_length` by calculating the difference between `started_at` and `ended_at`.
 
@@ -400,7 +400,7 @@ station_name_count_member_with_location <- left_join(station_name_count_member, 
 <br>
 It looks like some stations still do not have latitude and longitude values. It turns out that the dataset from <i>cityofchicago</i> is not complete enough. Let's export `station_name_count_member_with_location` to .csv and let's handle the rest of latitude and longitude manually with Excel.
 
-I manually included latitude and longitude by going to Google Maps and by searching for them in the <i>cityofchicago</i> website. I filled in all the latitude and longitude numbers manually in Excel, after I used <b>Conditional Formatting</b> to highlight <b>NA</b> values. 
+I manually include latitude and longitude by going to Google Maps and by searching for them in the <i>cityofchicago</i> website. I fill in all the latitude and longitude numbers manually in Excel, after I used <b>Conditional Formatting</b> to highlight <b>NA</b> values. 
 
 Next, let's save the updated .csv file to the Rstudio folder, and let's import it back:
 ```{r, eval=F, echo=T}

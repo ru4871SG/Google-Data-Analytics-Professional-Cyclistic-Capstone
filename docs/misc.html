@@ -453,8 +453,8 @@ AS add_ride_length
 ORDER BY ride_length</code></pre>
 <p><br> Save it to <code>cyclistic_2022_precleaned</code><br><br></p>
 </div>
-<div id="premature-data-cleaning" class="section level1">
-<h1>6. Premature Data Cleaning</h1>
+<div id="first-process-of-data-cleaning" class="section level1">
+<h1>6. First Process of Data Cleaning</h1>
 <hr>
 <pre class="r"><code>SELECT *
 FROM (SELECT *, 
@@ -518,8 +518,8 @@ WHERE start_station_name LIKE &quot;%TEST%&quot;
   OR end_station_id LIKE &quot;%test%&quot;
   OR end_station_id LIKE &quot;%Test%&quot;</code></pre>
 <p><br> Just like how I’ve explained it in the data analysis process
-with R page, this step is very important to find out what types of row
-values that need to be filtered. <br><br></p>
+with R, this step is very important to find out what types of row values
+that need to be filtered. <br><br></p>
 </div>
 <div id="final-data-cleaning" class="section level1">
 <h1>8. Final Data Cleaning</h1>
@@ -730,15 +730,15 @@ ORDER BY clean_hour_count DESC</code></pre>
 <code>count_popular_hours_casual</code> and
 <code>count_popular_hours_member</code>.<br><br></p>
 </div>
-<div id="analyze-ride-length-difference-between-casual-and-member"
+<div id="analyze-ride-length-difference-between-casuals-and-members"
 class="section level1">
-<h1>12. Analyze Ride Length Difference Between Casual and Member</h1>
+<h1>12. Analyze Ride Length Difference Between Casuals and Members</h1>
 <hr>
 <pre class="r"><code>SELECT AVG(total_seconds / 60) AS avg_ride_length_in_minutes, member_casual 
 FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned`
 GROUP BY member_casual
 ORDER BY avg_ride_length_in_minutes DESC</code></pre>
-<p><br><br></p>
+<p><br> Save the result as <code>avg_ride_length</code><br><br></p>
 </div>
 <div id="analyze-bike-types" class="section level1">
 <h1>13. Analyze Bike Types</h1>

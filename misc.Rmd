@@ -109,7 +109,7 @@ ORDER BY ride_length
 <br>
 Save it to `cyclistic_2022_precleaned`<br><br>
 
-# 6. Premature Data Cleaning
+# 6. First Process of Data Cleaning
 <hr>
 ```{r, eval=F, echo=T}
 SELECT *
@@ -182,7 +182,7 @@ WHERE start_station_name LIKE "%TEST%"
   OR end_station_id LIKE "%Test%"
 ```
 <br>
-Just like how I've explained it in the data analysis process with R page, this step is very important to find out what types of row values that need to be filtered.
+Just like how I've explained it in the data analysis process with R, this step is very important to find out what types of row values that need to be filtered.
 <br><br>
 
 # 8. Final Data Cleaning
@@ -420,7 +420,7 @@ ORDER BY clean_hour_count DESC
 <br>
 Let's save both of the above queries as `count_popular_hours_casual` and `count_popular_hours_member`.<br><br>
 
-# 12. Analyze Ride Length Difference Between Casual and Member
+# 12. Analyze Ride Length Difference Between Casuals and Members
 <hr>
 ```{r, eval=F, echo=T}
 SELECT AVG(total_seconds / 60) AS avg_ride_length_in_minutes, member_casual 
@@ -428,7 +428,8 @@ FROM `coursera-test-367602.cyclistic_case_study.cyclistic_2022_postcleaned`
 GROUP BY member_casual
 ORDER BY avg_ride_length_in_minutes DESC
 ```
-<br><br>
+<br>
+Save the result as `avg_ride_length`<br><br>
 
 # 13. Analyze Bike Types
 <hr>

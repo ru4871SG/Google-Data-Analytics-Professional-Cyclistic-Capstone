@@ -61,19 +61,19 @@ Feel free to check
 ### Popular Dates and Days
 
 ![](vizzes/ggarrange_popular_dates_comparison.png){width="100%"}
-The above data viz shows that both casuals and members like to use Cyclistic bikes between June and September, which are basically the summer months. It is understandable considering bike services are typically more popular during summer time.
+The above data viz shows that both casuals and members like to use Cyclistic bikes between June and September, which are basically the summer months. It is understandable, considering bike services are typically more popular during summertime.
 
-However, there is a big difference between casuals and members. Casuals love to use the bikes on Friday to Sunday (weekends), whereas members' busiest days are between Tuesday and Thursday. From this analysis alone, we can see members prefer to use the bikes for daily routines while casuals use Cyclistic more for leisures and hobbies.
+However, there is a big difference between casuals and members. Casuals love to use the bikes from Friday to Sunday (weekends), whereas members’ busiest days are between Tuesday and Thursday. From this analysis alone, we can see members prefer to use the bikes for daily routines while casuals use Cyclistic more for leisure and hobbies.
 
-To strengthen this narrative, you can check between November and January, where trip counts for casuals go much lower, but trip counts for members still look considerably higher. 
+To strengthen this narrative, you can check between November and January, where trip counts for casuals go much lower, but trip counts for members still look considerably higher.
 
-Daily routines (e.g., work commute) don't always change throughout the year, but people may not really use the bikes for leisures and hobbies in the winter months.
+Daily routines (e.g., work commute) don’t always change throughout the year, but people may not really use bikes for leisure and hobbies in the winter months.
 
-To analyze this hypothesis further, let's see how members and casuals compare if we only group the trip counts by the days<br>
+To analyze this hypothesis further, let’s see how members and casuals compare if we only group the trip counts by the days.<br>
 
 ![](vizzes/ggplot_day_of_week_count.png){width="90%"}
 
-Here everything looks clearer. Members use Cyclistic bikes more on weekdays, whereas casuals prefer to use them on weekends. This should confirm our previous analysis regarding how casuals use Cyclistic bikes for hobbies and leisures, and how they don't really use Cyclistic bikes for work commute and other weekday routines.<br><br>
+Here everything looks clearer. Members use Cyclistic bikes more on weekdays, whereas casuals prefer to use them on weekends. This should confirm our previous analysis regarding how casuals use Cyclistic bikes for hobbies and leisure and how they don’t really use Cyclistic bikes for work commutes and other weekday routines.<br><br>
 
 ### Popular Stations
 
@@ -81,7 +81,7 @@ Here everything looks clearer. Members use Cyclistic bikes more on weekdays, whe
 
 <iframe height="300" width=85% frameborder="0" scrolling="no" src="vizzes/leaflet_for_station_name_count_casual.html"></iframe>
 
-Above interactive map shows that <b>Streeter Dr & Grand Ave</b> is the most popular station for casuals, much more popular than every other station. Considering that <b>Streeter Dr & Grand Ave</b> is located right next to the Navy Pier, this analysis has proven my point on how casuals use the bikes for leisures and hobbies. The Navy Pier is a tourist attraction in Chicago.<br><br>
+Above interactive map shows that <b>Streeter Dr & Grand Ave</b> is the most popular station for casuals, much more popular than every other station. Considering that <b>Streeter Dr & Grand Ave</b> is located right next to the Navy Pier, this analysis has proven my point on how casuals use the bikes for leisure and hobbies. The Navy Pier is a tourist attraction in Chicago.<br><br>
 
 #### Popular Stations for Members:
 
@@ -92,19 +92,19 @@ The second interactive map shows popular stations for members. Here we can see t
 ### Popular Hours
 
 ![](vizzes/ggarrange_popular_hours_comparison.png){width="100%"}
-From the above data viz, you can see how both casuals and members like to use Cyclistic bikes between 15-18 (3PM - 6PM). 
+From the above data viz, you can see how both casuals and members like to use Cyclistic bikes between 15-18 (3 PM - 6 PM).
 
-However, casuals have higher trip counts between 20-22 (8PM - 10PM), whereas members have lower trip counts for the same hours.
+However, casuals have higher trip counts between 20-22 (8 PM - 10 PM), whereas members have lower trip counts for the same hours.
 
-On the other hand, morning time (7AM - 9AM) seems to be more popular for members, but not so much for casuals. 
+On the other hand, morning time (7 AM - 9 AM) is more popular for members, but not so much for casuals.
 
-All the findings above have proven our previous hypothesis where members may use the bikes more often for weekday routines, like work commute.<br>
+All the findings above have proven our previous hypothesis that members may use the bikes more often for weekday routines, like work commutes.<br>
 
 ![](vizzes/ggplot_ride_length_avg.png){width="90%"}
 
-Meanwhile, average ride length from casuals and members also differ greatly. Casuals' average ride length in minutes is <b>24.28 minutes</b>, while members' average ride length in minutes is <b>12.68 minutes</b>. 
+Meanwhile, average ride lengths from casuals and members also differ greatly. Casuals' average ride length in minutes is <b>24.28 minutes</b>, while members' average ride length in minutes is <b>12.68 minutes</b>. 
 
-The fact that casuals (on average) spend much more time with Cyclistic bikes show that casuals often use them to go to far locations. This is understandable because leisure destinations such as Navy Pier may be a bit too far away from the casual riders' starting stations. 
+The fact that casuals (on average) spend much more time with Cyclistic bikes shows that casuals often use them to go to far locations. This is understandable because leisure destinations such as Navy Pier may be a bit too far away from the casual riders' starting stations. 
 
 As for members, since they prefer to use the bikes for weekday routines, that explains the shorter ride length.
 <br><br>
@@ -112,7 +112,7 @@ As for members, since they prefer to use the bikes for weekday routines, that ex
 ### Popular Bike Types
 
 ![](vizzes/plotly_rideable_type_casual_vs_member.png){width="100%"}
-There is a difference between casuals and members when it comes to bike types. Members like classic bikes much more than electric bikes. As for casuals, they also like classic bikes more than electric, but the gap is not as big as the member group. 
+There is a difference between casuals and members when it comes to bike types. Members like classic bikes much more than electric bikes. As for casuals, they also like classic bikes more than electric ones, but the gap is not as big as the member group.
 
 Another interesting find, it looks like all docked bikes were only reserved for casuals in 2022.<br><br><br>
 
@@ -123,18 +123,18 @@ Based on my data analysis result, here are my recommendations for the company:
 
 <b>1. Casual riders should receive email newsletters showing how they can save money</b>
 
-Above analyses prove that casuals often use the bikes for leisure purposes. Average ride length for casuals is 24.28 minutes. That means on average casuals pay \$1 to unlock and \$9.46 for each trip. They can save money by signing up for annual memberships since it will only cost them \$10/month.
+The above analyses prove that casuals often use the bikes for leisure purposes. Average ride length for casuals is 24.28 minutes. That means, on average, casuals pay \$1 to unlock and \$9.46 for each trip. They can save money by signing up for annual memberships since it will only cost them \$10/month.
  
-<b>2. Personalized newsletters to casuals who use the bikes not for leisures</b>
+<b>2. Personalized newsletters to casuals who use the bikes not for leisure</b>
 
-There are still some casuals who may use the bikes for non-leisure purposes. As we can see from the above interactive map, not every casual go to stations close to the Navy Pear. And as we can see from the bar plots, there are also casuals who use the bikes during commute hours and weekdays.
+There are still some casuals who may use the bikes for non-leisure purposes. As we can see from the above interactive map, not every casual go to the stations close to the Navy Pear. And as we can see from the bar plots, there are also casuals who use the bikes during commute hours and on  weekdays.
 
-It might be worth it to try a personalized online newsletter campaign to target these groups. They may be interested to sign up for annual membership. You can also try to give them some discounts if they have used the bikes several times.
+It might be worth it to try a personalized online newsletter campaign to target these groups. They may be interested in signing up for annual membership. You can also try to give them some discounts if they have used the bikes several times.
 
 <b>3. Create interesting digital campaigns around the most popular stations for casuals</b>
 
-You can try to create interesting digital campaigns around the most popular stations for casuals. For example, create a with big banner with QR code "scan me to get a free ride", and put it around <b>Streeter Dr & Grand Ave</b>. 
+You can try to create interesting digital campaigns around the most popular stations for casuals. For example, create a big banner with a QR code "scan me to get a free ride", and put it around <b>Streeter Dr & Grand Ave</b>. 
 
-When you catch the casual riders' attention, they may use their phone to scan the QR code, and this QR code will lead them to a landing page where you give them 15-30 days free trial if they sign up for annual memberships.
+When you catch the casual riders' attention, they may use their phone to scan the QR code, and this QR code will lead them to a landing page where you give them a 15-30 days free trial if they sign up for annual memberships.
 
 You need to use A/B testing to see which campaigns work to attract their attention.

@@ -28,7 +28,7 @@ Download Divvy Bikes trip data from January 2022 up to December 2022. There are 
 
 # 2. Import Data to Rstudio and Preview Them
 <hr>
-Import all the CSVs to Rstudio:
+Import all the .csv files to Rstudio:
 
 ```{r, eval=F, echo=T}
 cyclistic_202201 <- read_csv("cyclistic_tripdata_202201.csv")
@@ -105,7 +105,7 @@ Let's just filter out all the negative values, and anything below 60 secs:
 cyclistic_2022_cleaned <- cyclistic_2022 %>% filter(!(ride_length < 60))
 ```
 <br>
-Once we find out there is no negative ride_length anymore, we leave out all the `NULL` values as well:
+Once I find out there is no negative ride_length anymore, I leave out all the `NULL` values as well:
 ```{r, eval=F, echo=T}
 cyclistic_2022_cleaned <- cyclistic_2022_cleaned %>% drop_na()
 ```
@@ -118,7 +118,7 @@ Check all uppercase or all lowercase values to find naming inconsistencies. Let'
 check_df <- cyclistic_2022 %>% filter(toupper(start_station_name) == start_station_name)
 ```
 <br>
-looks like there are some "test" or "maintenance" station names and IDs. For example, some `start_station_name rows` are 
+looks like there are some "test" or "maintenance" station names and IDs. For example, some `start_station_name` rows are 
 <b>WEST CHI-WATSON</b> which show the `start_station_id` as <b>DIVVY 001 - Warehouse test station</b>. This needs to be filtered.
 
 Next, let's investigate `end_station_name`:
@@ -167,7 +167,7 @@ After checking the `start_station_name` and `end_station_name` manually, I found
 
 I also found out that certain stations ended up with <b>(Temp)</b> and <b>- Charging</b>. To avoid duplicate station names during analysis stage later on, these stations should be cleaned as well.
 
-We clean the data by using gsub():
+We clean the data by using `gsub()`:
 ```{r, eval=F, echo=T}
 cyclistic_2022_cleaned$start_station_name <- gsub("\\*", "", cyclistic_2022_cleaned$start_station_name)
 
@@ -275,14 +275,14 @@ Let's see which day is the most popular:
 cyclistic_2022_cleaned %>% group_by(day_of_week) %>% count(day_of_week) %>% arrange(desc(n))
 ```
 <br>
-After running above code, I found out that Saturday (day 7) is the most popular, while Monday (day 2) is the least popular.  Next, separate them by member and casual:
+Next, separate them by member and casual:
 ```{r, eval=F, echo=T}
 day_of_week_count <- cyclistic_2022_cleaned %>% group_by(day_of_week, member_casual) %>% count(day_of_week) %>% arrange(desc(n))
 ```
 <br>
-For now let's save this result as `day_of_week_count`. With the member filter, I found out that several of the most popular trips were on Wednesday and Thursday (day 4 and 5). Whereas for casuals, Saturday and Sunday (day 7 and day 1) were more popular.
+For now let's save this result as `day_of_week_count`. 
 	
-Next, let's analyze the popular dates and group them by either week or month. First, let's get the week and month to check them better:
+Next, let's analyze the popular dates and group them by either week or month. First, let's get the week and the month to check them better:
 ```{r, eval=F, echo=T}	
 	clean_week_and_month <- cyclistic_2022_cleaned %>% mutate(week = week(started_at), month = month(started_at)) 
 ```
@@ -314,7 +314,7 @@ clean_hour$started_at <- format(clean_hour$started_at, "%H")
 clean_hour %>% group_by(started_at) %>% count(started_at) %>% arrange(desc(n))
 ```
 <br>
-From above codes, looks like 3PM to 6PM are more popular. Next, let's divide them by the casual or member groups.
+Next, let's divide them by the casual or member groups.
 ```{r, eval=F, echo=T}
 popular_hours_member_count <- clean_hour %>% filter(member_casual == 'member') %>% group_by(started_at, member_casual) %>% count(started_at) %>% arrange(desc(n))
 ```
@@ -324,9 +324,9 @@ and
 popular_hours_casual_count <- clean_hour %>% filter(member_casual == 'casual') %>% group_by(started_at, member_casual) %>% count(started_at) %>% arrange(desc(n))
 ```
 <br>
-It looks like members are more likely to use the bikes for work commute and weekday routines. On the other hand, casuals don't use the bikes as much during the commute hours in the morning, but they still use the bikes often during commute hours in the evening. Casuals also have more tendency to use the bikes around 8-10 PM as compared to members.<br><br>
+It looks like members are more likely to use the bikes for work commute and weekday routines. On the other hand, casuals don't use the bikes as much during the commute hours in the morning, but they still use the bikes often during commute hours in the evening.<br><br>
 
-# 12. Analyze ride_length Difference Between Casual and Member
+# 12. Analyze Ride Length Difference Between Casual and Member
 <hr>
 Earlier, I calculated the `ride_length` by calculating the difference between `started_at` and `ended_at`.
 
@@ -335,7 +335,7 @@ To calculate `average ride_length` in minutes, let's just convert `ride_length` 
 ride_length_avg <- cyclistic_2022_cleaned %>% mutate(ride_length_in_minutes = as.numeric(ride_length / 60)) %>% group_by(member_casual) %>% summarize(avg_ride_length_in_minutes = mean(ride_length_in_minutes))
 ```
 <br>
-Above code provides `average ride_length` in minutes, and compare them between members and casuals.<br><br>
+The above code provides `average ride_length` in minutes, and compare them between members and casuals.<br><br>
 
 # 13. Analyze Bike Types
 <hr>
@@ -349,12 +349,12 @@ Next, check how many total trips they have between members vs. casuals:
 member_vs_casual_count <- cyclistic_2022_cleaned %>% group_by(member_casual) %>% count(member_casual) %>% arrange(desc(n))
 ```
 <br>
-From above code, looks like members make much more trips as compared to casuals. For further analysis, use `inner join` and `mutate` to see the percentages from each group:
+From the above code, looks like members make much more trips as compared to casuals. For further analysis, use `inner join` and `mutate` to see the percentages from each group:
 ```{r, eval=F, echo=T}
 rideable_type_count_and_percentage <- inner_join(rideable_type_count, member_vs_casual_count, by = c("member_casual"="member_casual")) %>% mutate(trips_percentage = n.x / n.y)
 ```
 <br>
-The above code will allow us to see the percentage of members that use classic bikes vs. electric bikes, and percentage of casuals that use classic bikes vs. electric bikes. vs docked bikes. 
+The last code will allow us to see the percentage of members that use classic bikes vs. electric bikes, and percentage of casuals that use classic bikes vs. electric bikes. vs docked bikes. 
 
 After I checked `rideable_type_count_and_percentage`, I realized it's better to separate the `member_casual` group:
 ```{r, eval=F, echo=T}
@@ -400,7 +400,7 @@ station_name_count_member_with_location <- left_join(station_name_count_member, 
 <br>
 It looks like some stations still do not have latitude and longitude values. It turns out that the dataset from <i>cityofchicago</i> is not complete enough. Let's export `station_name_count_member_with_location` to .csv and let's handle the rest of latitude and longitude manually with Excel.
 
-I manually included latitude and longitude by going to google maps and even just manually searching for them in the cityofchicago website. I filled in all the latitude and longitude numbers manually in Excel, after I used <b>Conditional Formatting</b> to highlight <b>NA</b> values. 
+I manually included latitude and longitude by going to Google Maps and by searching for them in the <i>cityofchicago</i> website. I filled in all the latitude and longitude numbers manually in Excel, after I used <b>Conditional Formatting</b> to highlight <b>NA</b> values. 
 
 Next, let's save the updated .csv file to the Rstudio folder, and let's import it back:
 ```{r, eval=F, echo=T}
@@ -421,62 +421,9 @@ These two files with latitude and longitude, I will visualize them with leaflet.
 # 15. Data Visualization
 <hr>
 
-###	1. Leaflet for station_name_count_casual:
+###	1. Leaflet for station_name_count_member:
 
-```{r, eval=F, echo=T}
-mypalette2 <- colorBin(
-    palette ="plasma",
-    domain = station_name_count_casual_with_location$n_total,
-    na.color = "transparent", 
-    bins = 6
-)
-```
-<br>
-then
-```{r, eval=F, echo=T}
-mytext2 <- paste(
-    "<b>Station:</b>", station_name_count_casual_with_location$station_name, "<br />",
-    "<b>Counts:</b>", station_name_count_casual_with_location$n_total) %>%
-    lapply(htmltools::HTML)
-```
-<br>
-then
-```{r, eval=F, echo=T}
-leaflet_for_station_name_count_casual <- leaflet(station_name_count_casual_with_location) %>%
-    addTiles() %>%
-    setView(
-        lng = -87.6298, lat = 41.8781, zoom = 12
-    ) %>%
-    
-    addCircleMarkers(
-        ~ Longitude, ~ Latitude, 
-        fillColor = ~ mypalette2(n_total), 
-        fillOpacity = 0.7, 
-        color = "white", 
-        radius = 7, 
-        stroke = FALSE,
-        label = mytext2,
-        labelOptions = labelOptions(
-            style = list( 
-                "font-weight" = "normal", 
-                padding = "3px 8px"
-            ), 
-            textsize = "13px", 
-            direction = "auto"
-        ) 
-    ) %>%
-    
-    addLegend( 
-        pal = mypalette2, 
-        values = ~ n_total, 
-        opacity = 0.9,
-        title = "Station Name Counts", 
-        position = "bottomright"
-    )
-```
-<br><br>
-
-###	2. Leaflet for station_name_count_member:
+Let's start with `leaflet`. From  my experience, they look better than plotly for data visualization with OpenStreetMap. Let's start with the palette and text, which will be used for `leaflet()`:
 
 ```{r, eval=F, echo=T}
 mypalette <- colorBin(
@@ -487,7 +434,7 @@ mypalette <- colorBin(
 )
 ```
 <br>
-then
+next, let's go with the text:
 ```{r, eval=F, echo=T}
 mytext <- paste(
     "<b>Station:</b>", station_name_count_member_with_location$station_name, "<br />",
@@ -495,7 +442,7 @@ mytext <- paste(
     lapply(htmltools::HTML)
 ```
 <br>
-then
+then, let's use both `mytext` and `mypalette` for `leaflet()`:
 ```{r, eval=F, echo=T}
 leaflet_for_station_name_count_member <- leaflet(station_name_count_member_with_location) %>%
     addTiles() %>%
@@ -531,8 +478,65 @@ leaflet_for_station_name_count_member <- leaflet(station_name_count_member_with_
 ```
 <br><br>
 
+###	2. Leaflet for station_name_count_casual:
+
+Now let's do the same but for the casual group:
+```{r, eval=F, echo=T}
+mypalette2 <- colorBin(
+    palette ="plasma",
+    domain = station_name_count_casual_with_location$n_total,
+    na.color = "transparent", 
+    bins = 6
+)
+```
+<br>
+then:
+```{r, eval=F, echo=T}
+mytext2 <- paste(
+    "<b>Station:</b>", station_name_count_casual_with_location$station_name, "<br />",
+    "<b>Counts:</b>", station_name_count_casual_with_location$n_total) %>%
+    lapply(htmltools::HTML)
+```
+<br>
+and let's use both `mytext2` and `mypalette2` for `leaflet()`:
+```{r, eval=F, echo=T}
+leaflet_for_station_name_count_casual <- leaflet(station_name_count_casual_with_location) %>%
+    addTiles() %>%
+    setView(
+        lng = -87.6298, lat = 41.8781, zoom = 12
+    ) %>%
+    
+    addCircleMarkers(
+        ~ Longitude, ~ Latitude, 
+        fillColor = ~ mypalette2(n_total), 
+        fillOpacity = 0.7, 
+        color = "white", 
+        radius = 7, 
+        stroke = FALSE,
+        label = mytext2,
+        labelOptions = labelOptions(
+            style = list( 
+                "font-weight" = "normal", 
+                padding = "3px 8px"
+            ), 
+            textsize = "13px", 
+            direction = "auto"
+        ) 
+    ) %>%
+    
+    addLegend( 
+        pal = mypalette2, 
+        values = ~ n_total, 
+        opacity = 0.9,
+        title = "Station Name Counts", 
+        position = "bottomright"
+    )
+```
+<br><br>
+
 ###	3. GGPlot for Popular Dates:
 
+Now it's time to visualize the popular dates:
 ```{r, eval=F, echo=T}
 ggplot_popular_dates_casual_count <- ggplot(
     popular_dates_casual_count, 
@@ -575,7 +579,7 @@ ggplot_popular_dates_casual_count <- ggplot(
     )
 ```
 <br>
-then
+then, write this code:
 ```{r, eval=F, echo=T}
 ggplot_popular_dates_member_count <- ggplot(
     popular_dates_member_count, 
@@ -618,7 +622,7 @@ ggplot_popular_dates_member_count <- ggplot(
     )
 ```
 <br>
-Next, combine them using `ggarrange()`:
+Next, combine them using `ggarrange()` from `ggpubr` library:
 ```{r, eval=F, echo=T}
 ggarrange_popular_dates_comparison <- ggarrange(
     ggplot_popular_dates_casual_count, 
@@ -632,6 +636,8 @@ ggarrange_popular_dates_comparison <- ggarrange(
 <br><br>
 
 ###	4. GGPlot for Days of Week:
+
+Let's use `ggplot2` again but for days of week count:
 ```{r, eval=F, echo=T}
 ggplot_day_of_week_count <- ggplot(day_of_week_count, 
        aes(y=n, x=day_of_week, fill=member_casual)) + 
@@ -661,6 +667,7 @@ ggplot_day_of_week_count <- ggplot(day_of_week_count,
 	
 ###	5. GGPlot for Popular Hours:
 
+To visualize popular hours, let's use the same `geom_bar()` but with `coord_polar(start = 0)` to make it circular:
 ```{r, eval=F, echo=T}
 ggplot_popular_hours_casual_count <- ggplot(popular_hours_casual_count, 
        aes(y=n, x=started_at)) + 
@@ -682,7 +689,7 @@ ggplot_popular_hours_casual_count <- ggplot(popular_hours_casual_count,
     )
 ```
 <br>
-then
+and for the members group:
 ```{r, eval=F, echo=T}
 ggplot_popular_hours_member_count <- ggplot(popular_hours_member_count, 
                                             aes(y=n, x=started_at)) + 
@@ -716,6 +723,7 @@ ggarrange_popular_hours_comparison <- ggarrange(
 
 ### 6. GGplot for Avg. Ride Length:
 
+This one is fairly simple:
 ```{r, eval=F, echo=T}
 ggplot_ride_length_avg <- ggplot(ride_length_avg, 
        aes(y=member_casual, x=avg_ride_length_in_minutes, fill=member_casual)) + 
@@ -737,6 +745,7 @@ ggplot_ride_length_avg <- ggplot(ride_length_avg,
 
 ### 7. Plotly for the Pie Charts:
 
+Technically, I can just use `ggplot2` once again, but `plotly` is far easier to create pie charts:
 ```{r, eval=F, echo=T}
 plotly_rideable_type_casual <- plot_ly(rideable_type_casual, labels = ~rideable_type, values = ~trips_percentage, type = 'pie',
         textposition = 'inside',
@@ -750,7 +759,7 @@ plotly_rideable_type_casual <- plot_ly(rideable_type_casual, labels = ~rideable_
     layout(annotations = list(x = 0.3, y = 1.05, text = "Casual", showarrow = F, xref='paper', yref='paper', xanchor='right', yanchor='auto', xshift=0, yshift=0, font=list(size=25, color = '#1b9e77')))
 ```
 <br>
-and:
+next, do the same for the members group:
 ```{r, eval=F, echo=T}
 plotly_rideable_type_member <- plot_ly(rideable_type_member, labels = ~rideable_type, values = ~trips_percentage, type = 'pie',
        textposition = 'inside',
@@ -765,3 +774,5 @@ plotly_rideable_type_member <- plot_ly(rideable_type_member, labels = ~rideable_
 ```
 
 I don't use `subplot()` to merge above plotly charts, I just combine the exported images manually.
+
+That's it. All data vizzes are ready.

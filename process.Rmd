@@ -775,4 +775,4 @@ plotly_rideable_type_member <- plot_ly(rideable_type_member, labels = ~rideable_
 
 I don't use `subplot()` to merge above plotly charts, I just combine the exported images manually.
 
-That's it. All data vizzes are ready.
+That's it. All data visualizations are ready now.

@@ -61,7 +61,7 @@ Feel free to check
 ### Popular Dates and Days
 
 ![](vizzes/ggarrange_popular_dates_comparison.png){width="100%"}
-The above data viz shows that both casuals and members like to use Cyclistic bikes between June and September, which are basically the summer months. It is understandable, considering bike services are typically more popular during summertime.
+The above data visualization shows that both casuals and members like to use Cyclistic bikes between June and September, which are basically the summer months. It is understandable, considering bike services are typically more popular during summertime.
 
 However, there is a big difference between casuals and members. Casuals love to use the bikes from Friday to Sunday (weekends), whereas members’ busiest days are between Tuesday and Thursday. From this analysis alone, we can see members prefer to use the bikes for daily routines while casuals use Cyclistic more for leisure and hobbies.
 
@@ -92,7 +92,7 @@ The second interactive map shows popular stations for members. Here we can see t
 ### Popular Hours
 
 ![](vizzes/ggarrange_popular_hours_comparison.png){width="100%"}
-From the above data viz, you can see how both casuals and members like to use Cyclistic bikes between 15-18 (3 PM - 6 PM).
+From the above data visualization, you can see how both casuals and members like to use Cyclistic bikes between 15-18 (3 PM - 6 PM).
 
 However, casuals have higher trip counts between 20-22 (8 PM - 10 PM), whereas members have lower trip counts for the same hours.
 

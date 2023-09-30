@@ -56,7 +56,7 @@ For the sake of my own learning purposes, I also re-analyzed the same datasets u
 Feel free to check
 <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/process.html" target="_blank">my data analysis process in R</a> as well as the <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/misc.html" target="_blank">alternative steps in SQL</a>.<br><br><br>
 
-# Analysis Results
+# Data Analysis Report
 <hr>
 ### Popular Dates and Days
 
@@ -94,9 +94,7 @@ The second interactive map shows popular stations for members. Here we can see t
 ![](vizzes/ggarrange_popular_hours_comparison.png){width="100%"}
 From the above data visualization, you can see how both casuals and members like to use Cyclistic bikes between 15-18 (3 PM - 6 PM).
 
-However, casuals have higher trip counts between 20-22 (8 PM - 10 PM), whereas members have lower trip counts for the same hours.
-
-On the other hand, morning time (7 AM - 9 AM) is more popular for members, but not so much for casuals.
+However, casuals have higher trip counts later at night. On the other hand, morning time is more popular for members, but not so much for casuals.
 
 All the findings above have proven our previous hypothesis that members may use the bikes more often for weekday routines, like work commutes.<br>
 

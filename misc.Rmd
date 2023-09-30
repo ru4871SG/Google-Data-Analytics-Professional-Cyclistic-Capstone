@@ -1,5 +1,5 @@
 ---
-title: "Data Analysis Process with SQL"
+title: "Data Analysis Process with SQL (BigQuery)"
 output:
   html_document:
     toc: true
@@ -27,11 +27,11 @@ Here you can find the alternative steps in SQL, however, I won't write much deta
 
 <br><br>
 
-# 1. Import Datasets to BigQuery
+# 1. Import Trip Data to BigQuery
 <hr>
-I can't import half of the datasets directly. Datasets from May 2022 to October 2022 are larger than 100 MB. I have to convert these large files to Excel Workbook files, and then, I need to make sure to use `yyyy-mm-dd h:mm:ss` format for some of the columns.<br><br>
+I can't import half of the trip data directly. Trip data from May 2022 to October 2022 are larger than 100 MB. I have to convert these large files to Excel Workbook files, and then, I need to make sure to use `yyyy-mm-dd h:mm:ss` format for some of the columns.<br><br>
 
-# 2. Slice Larger Files to Two Different Sheets 
+# 2. Slice Larger Files to Smaller Files
 <hr>
 By slicing them with Microsoft Excel, the file sizes will be smaller (this is needed to bypass the 100 MB limitation in BigQuery). For example, <b>may_1.csv</b> and <b>may_2.csv</b>, <b>june_1.csv</b> and <b>june_2.csv</b>, and so on. The rest of csv which originally are less than 100 MB, I don't need to slice them. Import all to BigQuery.
 

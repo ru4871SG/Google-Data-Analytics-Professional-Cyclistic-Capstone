@@ -11,9 +11,9 @@
 
 
 
-<title>Data Analysis Process with SQL</title>
+<title>Data Analysis Process with SQL (BigQuery)</title>
 
-<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -29,7 +29,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -339,7 +339,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Data Analysis Process with SQL</h1>
+<h1 class="title toc-ignore">Data Analysis Process with SQL
+(BigQuery)</h1>
 
 </div>
 
@@ -364,18 +365,17 @@ explain the same steps.</p>
 project folder in the below steps.</p>
 <p><br><br></p>
 </div>
-<div id="import-datasets-to-bigquery" class="section level1">
-<h1>1. Import Datasets to BigQuery</h1>
+<div id="import-trip-data-to-bigquery" class="section level1">
+<h1>1. Import Trip Data to BigQuery</h1>
 <hr>
-<p>I can’t import half of the datasets directly. Datasets from May 2022
-to October 2022 are larger than 100 MB. I have to convert these large
-files to Excel Workbook files, and then, I need to make sure to use
-<code>yyyy-mm-dd h:mm:ss</code> format for some of the
+<p>I can’t import half of the trip data directly. Trip data from May
+2022 to October 2022 are larger than 100 MB. I have to convert these
+large files to Excel Workbook files, and then, I need to make sure to
+use <code>yyyy-mm-dd h:mm:ss</code> format for some of the
 columns.<br><br></p>
 </div>
-<div id="slice-larger-files-to-two-different-sheets"
-class="section level1">
-<h1>2. Slice Larger Files to Two Different Sheets</h1>
+<div id="slice-larger-files-to-smaller-files" class="section level1">
+<h1>2. Slice Larger Files to Smaller Files</h1>
 <hr>
 <p>By slicing them with Microsoft Excel, the file sizes will be smaller
 (this is needed to bypass the 100 MB limitation in BigQuery). For

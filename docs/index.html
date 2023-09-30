@@ -13,7 +13,7 @@
 
 <title>Cyclistic Bike-Share Analysis Case Study</title>
 
-<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -29,7 +29,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -374,14 +374,13 @@ annual members may use Cyclistic services differently and how to use
 digital media to convert Cyclistic casual riders to become
 members.<br><br><br></p>
 </div>
-<div id="datasets" class="section level1">
-<h1>Datasets</h1>
+<div id="data-source" class="section level1">
+<h1>Data Source</h1>
 <hr>
-<p>While Cyclistic is a fictional company, datasets gathered for this
-analysis come from a real company operating in Chicago called Divvy
-Bikes.</p>
+<p>While Cyclistic is a fictional company, data source for this analysis
+comes from a real company operating in Chicago called Divvy Bikes.</p>
 <p><a href="https://divvybikes.com/system-data" target="_blank">Divvy
-trip</a> datasets from January 2022 to December 2022 were used for this
+data trip</a> from January 2022 to December 2022 were used for this
 analysis.</p>
 <p>Each trip includes:</p>
 <ul>
@@ -391,21 +390,21 @@ analysis.</p>
 <li>Trip end station</li>
 <li>Rider type</li>
 </ul>
-<p>The datasets have been made available under
+<p>The data has been made available under
 <a href="https://ride.divvybikes.com/data-license-agreement" target="_blank">this
 license</a><br><br><br></p>
 </div>
 <div id="methods" class="section level1">
 <h1>Methods</h1>
 <hr>
-<p>The datasets were loaded into RStudio, and then previewed, cleaned,
+<p>The csv files were loaded into RStudio, and then previewed, cleaned,
 filtered, merged, and analyzed with the help of multiple libraries, such
 as <code>skimr</code>, <code>tidyverse</code>, and
 <code>lubridate</code>. As for data visualization, <code>ggplot2</code>,
 <code>plotly</code>, <code>leaflet</code>, and <code>rgdal</code> were
 all used.</p>
 <p>For the sake of my own learning purposes, I also re-analyzed the same
-datasets using SQL with BigQuery. The analysis results are consistent
+dataset using SQL with BigQuery. The analysis results are consistent
 between SQL and R.</p>
 <p>Feel free to check
 <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/process.html" target="_blank">my
@@ -413,8 +412,8 @@ data analysis process in R</a> as well as the
 <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/misc.html" target="_blank">alternative
 steps in SQL</a>.<br><br><br></p>
 </div>
-<div id="analysis-results" class="section level1">
-<h1>Analysis Results</h1>
+<div id="data-analysis-report" class="section level1">
+<h1>Data Analysis Report</h1>
 <hr>
 <div id="popular-dates-and-days" class="section level3">
 <h3>Popular Dates and Days</h3>
@@ -476,10 +475,9 @@ out.<br><br></p>
 style="width:100.0%" /> From the above data visualization, you can see
 how both casuals and members like to use Cyclistic bikes between 15-18
 (3 PM - 6 PM).</p>
-<p>However, casuals have higher trip counts between 20-22 (8 PM - 10
-PM), whereas members have lower trip counts for the same hours.</p>
-<p>On the other hand, morning time (7 AM - 9 AM) is more popular for
-members, but not so much for casuals.</p>
+<p>However, casuals have higher trip counts later at night. On the other
+hand, morning time is more popular for members, but not so much for
+casuals.</p>
 <p>All the findings above have proven our previous hypothesis that
 members may use the bikes more often for weekday routines, like work
 commutes.<br></p>

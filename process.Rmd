@@ -22,9 +22,9 @@ This page explains all the processes for my data cleaning, transformation, and a
 And I also re-created all the below steps using SQL with BigQuery for my learning purposes. The analysis results are consistent between SQL and R.
 <br><br>
 
-# 1. Download Datasets and Rename Them
+# 1. Download Trip Data and Rename the Files
 <hr>
-Download Divvy Bikes trip data from January 2022 up to December 2022. There are 12 .csv files in total. Rename all the .csv files to <b>cyclistic_tripdata_202201.csv</b>, <b>cyclistic_tripdata_202202.csv</b>, etc. to make them look consistent.<br><br>
+Download Divvy Bikes trip data from January 2022 up to December 2022. There are 12 csv files in total. Rename all the csv files to <b>cyclistic_tripdata_202201.csv</b>, <b>cyclistic_tripdata_202202.csv</b>, etc. to make them look consistent.<br><br>
 
 # 2. Import Data to Rstudio and Preview Them
 <hr>

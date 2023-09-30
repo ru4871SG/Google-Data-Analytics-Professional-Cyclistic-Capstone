@@ -31,11 +31,11 @@ As of February 2022, Cyclistic pricing plans are as follows:
 
 Cyclistic's director of marketing believes the company’s future will depend on maximizing the number of annual memberships. With this objective in mind, the company wants to learn how casual riders and annual members may use Cyclistic services differently and how to use digital media to convert Cyclistic casual riders to become members.<br><br><br>
 
-# Datasets
+# Data Source
 <hr>
-While Cyclistic is a fictional company, datasets gathered for this analysis come from a real company operating in Chicago called Divvy Bikes.
+While Cyclistic is a fictional company, data source for this analysis comes from a real company operating in Chicago called Divvy Bikes.
 
-<a href="https://divvybikes.com/system-data" target="_blank">Divvy trip</a> datasets from January 2022 to December 2022 were used for this analysis.
+<a href="https://divvybikes.com/system-data" target="_blank">Divvy data trip</a> from January 2022 to December 2022 were used for this analysis.
 
 Each trip includes:
 
@@ -45,13 +45,13 @@ Each trip includes:
 - Trip end station 
 - Rider type
 
-The datasets have been made available under <a href="https://ride.divvybikes.com/data-license-agreement" target="_blank">this license</a><br><br><br>
+The data has been made available under <a href="https://ride.divvybikes.com/data-license-agreement" target="_blank">this license</a><br><br><br>
 
 # Methods
 <hr>
-The datasets were loaded into RStudio, and then previewed, cleaned, filtered, merged, and analyzed with the help of multiple libraries, such as `skimr`, `tidyverse`, and `lubridate`. As for data visualization, `ggplot2`, `plotly`, `leaflet`, and `rgdal` were all used.
+The csv files were loaded into RStudio, and then previewed, cleaned, filtered, merged, and analyzed with the help of multiple libraries, such as `skimr`, `tidyverse`, and `lubridate`. As for data visualization, `ggplot2`, `plotly`, `leaflet`, and `rgdal` were all used.
 
-For the sake of my own learning purposes, I also re-analyzed the same datasets using SQL with BigQuery. The analysis results are consistent between SQL and R.
+For the sake of my own learning purposes, I also re-analyzed the same dataset using SQL with BigQuery. The analysis results are consistent between SQL and R.
 
 Feel free to check
 <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/process.html" target="_blank">my data analysis process in R</a> as well as the <a href="https://ru4871sg.github.io/Google-Data-Analytics-Professional-Cyclistic-Capstone/misc.html" target="_blank">alternative steps in SQL</a>.<br><br><br>
